@@ -18,5 +18,5 @@ let authorizationCheck = (req, res, next) => {
   next(err)
 }
 
-module.exports.routes = authRouter
+module.exports.router = authRouter
 module.exports.authorizationCheck = authorizationCheck

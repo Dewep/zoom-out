@@ -1,6 +1,8 @@
 const express = require('express')
+const projectDatabase = require('./project_database')
+const projectPush = require('./project_push')
 
-let pushRouter = () => {
+let projectRouter = () => {
   let router = express.Router()
 
   router.use((req, res, next) => {
@@ -13,7 +15,11 @@ let pushRouter = () => {
     next(err)
   })
 
+  router.use('/database', projectDatabase.router())
+
+  router.use('/push', projectPush.router())
+
   return router
 }
 
-module.exports.routes = pushRouter
+module.exports.router = projectRouter

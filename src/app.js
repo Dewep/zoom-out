@@ -12,11 +12,11 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use('/api/auth', controllers.auth.routes())
+app.use('/api/auth', controllers.auth.router())
 
 app.use('/api', controllers.auth.authorizationCheck)
 
-app.use('/api/push/:project', controllers.push.routes())
+app.use('/api/:project', controllers.project.router())
 
 // app.use(express.static('src/web/public'))
 
