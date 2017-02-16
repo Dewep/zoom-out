@@ -16,7 +16,7 @@ app.use('/api/auth', controllers.auth.router())
 
 app.use('/api', controllers.auth.authorizationCheck)
 
-app.use('/api/:project', controllers.project.router())
+app.use('/api/projects', controllers.project.router())
 
 // app.use(express.static('src/web/public'))
 
