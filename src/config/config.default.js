@@ -30,7 +30,7 @@ module.exports = {
   },
   elasticsearch: {
     host: 'localhost:9200',
-    log: 'trace',
+    log: 'info',
     apiVersion: '5.0'
   }
 }

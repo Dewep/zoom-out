@@ -10,8 +10,8 @@ let projectDatabaseRouter = () => {
 
   router.post('/:model/', (req, res, next) => {
     es.client.indices.create({
-      index: req.modelId,
-      body: es.types.createMapping(req.model)
+      index: `${req.projectId}-${req.modelId}`,
+      body: es.types.createMapping(req.modelId, req.model)
     }).then(mapping => {
       res.json(mapping)
     }).catch(next)
@@ -19,7 +19,7 @@ let projectDatabaseRouter = () => {
 
   router.delete('/:model/', (req, res, next) => {
     es.client.indices.delete({
-      index: req.modelId
+      index: `${req.projectId}-${req.modelId}`,
     }).then(mapping => {
       res.json(mapping)
     }).catch(next)
