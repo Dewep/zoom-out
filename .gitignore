@@ -38,3 +38,4 @@ jspm_packages
 
 /data
 /server/config/config.local.js
+/web/public/dist

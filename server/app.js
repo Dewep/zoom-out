@@ -18,7 +18,7 @@ app.use('/api', controllers.auth.authorizationCheck)
 
 app.use('/api/projects', controllers.project.router())
 
-// app.use(express.static('src/web/public'))
+app.use(express.static('web/public'))
 
 app.use((err, req, res, next) => {
   res.status(err.status || 400)
