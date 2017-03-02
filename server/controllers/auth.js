@@ -8,12 +8,8 @@ let authRouter = () => {
 }
 
 let authorizationCheck = (req, res, next) => {
-  if (req.headers.authorization) {
-    req.projectId = config.apiKeys[req.headers.authorization]
-    if (req.projectId && config.projects[req.projectId]) {
-      req.project = config.projects[req.projectId]
-      return next()
-    }
+  if (req.headers.authorization && config.apiKeys.indexOf(req.headers.authorization) !== -1) {
+    return next()
   }
 
   let err = new Error('Unauthorized')

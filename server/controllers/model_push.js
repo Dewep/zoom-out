@@ -2,15 +2,12 @@ const express = require('express')
 const _ = require('lodash')
 const config = require('../config')
 const es = require('../elasticsearch')
-const project = require('./project')
 
-let projectPushRouter = () => {
+let modelPushRouter = () => {
   let router = express.Router()
 
-  router.param('model', project.projectModelParam)
-
-  router.post('/:model/', (req, res, next) => {
-    let data = es.types.getBody(req.body, req.model)
+  router.post('/', (req, res, next) => {
+    let data = es.types.getBody(req.body, req.model.definition)
 
     if (!_.size(data)) {
       console.log(req.body, data)
@@ -18,7 +15,7 @@ let projectPushRouter = () => {
     }
 
     es.client.index({
-      index: `${req.projectId}-${req.modelId}`,
+      index: `${config.project}-${req.modelId}`,
       type: req.modelId,
       body: data
     }).then(doc => {
@@ -29,4 +26,4 @@ let projectPushRouter = () => {
   return router
 }
 
-module.exports.router = projectPushRouter
+module.exports.router = modelPushRouter
