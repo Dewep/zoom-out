@@ -8,7 +8,7 @@ let modelDatabaseRouter = () => {
   router.post('/', (req, res, next) => {
     es.client.indices.create({
       index: `${config.project}-${req.modelId}`,
-      body: es.types.createMapping(req.modelId, req.model.definition)
+      body: es.types.createMapping(req.model.definition, req.modelId)
     }).then(mapping => {
       res.json(mapping)
     }).catch(next)

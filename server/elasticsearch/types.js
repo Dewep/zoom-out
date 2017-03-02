@@ -3,7 +3,7 @@ const assert = require('assert')
 
 let types = ['boolean', 'date', 'ip', 'keyword', 'byte', 'short', 'integer', 'long', 'double', 'object']
 
-let createMapping = (name, config) => {
+let createMapping = (config, name) => {
   let generateProperties = (properties) => {
     let generatedProperties = {}
 
@@ -32,13 +32,13 @@ let createMapping = (name, config) => {
   }
 }
 
-let getBody = (body, config) => {
+let getBody = (config, body) => {
   let data = {}
 
   _.forEach(config, (property, propertyName) => {
     if (body[propertyName] !== undefined) {
       if (property.type === 'object') {
-        data[propertyName] = getBody(body[propertyName], property.properties)
+        data[propertyName] = getBody(property.properties, body[propertyName])
       } else {
         data[propertyName] = body[propertyName]
       }
@@ -48,8 +48,29 @@ let getBody = (body, config) => {
   return data
 }
 
+let getField = (config, fieldName) => {
+  let field = null
+  let fieldNames = fieldName.split('.')
+
+  _.some(config, (property, propertyName) => {
+    if (fieldNames.length && fieldNames[0] === propertyName) {
+      if (property.type === 'object' && fieldNames.length > 1) {
+        field = getField(property.properties, fieldNames.slice(1).join('.'))
+        return true
+      } else if (fieldNames.length === 1) {
+        field = property
+        return true
+      }
+    }
+    return false
+  })
+
+  return field
+}
+
 module.exports = {
   types: types,
+  getField: getField,
   createMapping: createMapping,
   getBody: getBody
 }

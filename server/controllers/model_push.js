@@ -7,10 +7,9 @@ let modelPushRouter = () => {
   let router = express.Router()
 
   router.post('/', (req, res, next) => {
-    let data = es.types.getBody(req.body, req.model.definition)
+    let data = es.types.getBody(req.model.definition, req.body)
 
     if (!_.size(data)) {
-      console.log(req.body, data)
       return next(new Error('Empty body'))
     }
 

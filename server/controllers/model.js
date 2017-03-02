@@ -2,6 +2,7 @@ const express = require('express')
 const config = require('../config')
 const modelDatabase = require('./model_database')
 const modelPush = require('./model_push')
+const modelQuery = require('./model_query')
 
 let modelRouter = () => {
   let router = express.Router()
@@ -21,6 +22,8 @@ let modelRouter = () => {
   router.use('/:model/database', modelDatabase.router())
 
   router.use('/:model/push', modelPush.router())
+
+  router.use('/:model/query', modelQuery.router())
 
   return router
 }
