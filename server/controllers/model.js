@@ -19,6 +19,13 @@ let modelRouter = () => {
     next(err)
   })
 
+  router.get('/', (req, res, next) => {
+    res.json({
+      project: config.project,
+      models: config.models
+    })
+  })
+
   router.use('/:model/database', modelDatabase.router())
 
   router.use('/:model/push', modelPush.router())
