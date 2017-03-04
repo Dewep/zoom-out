@@ -1,0 +1,19 @@
+@import 'theme-github';
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: $color-bg;
+  color: $color-text;
+}
+
+a, a:link, a:visited {
+  color: $color-link;
+}
+a:hover, a:focus, a:active {
+  text-decoration: underline;
+}
