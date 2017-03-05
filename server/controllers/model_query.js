@@ -88,6 +88,25 @@ let modelQueryRouter = () => {
     }).catch(next)
   })
 
+  router.post('/aggregations/', (req, res, next) => {
+    let filters = req.body.filters || {}
+    let filterExclude = req.body.filterExclude || null
+    let aggregations = req.body.aggregations || {}
+
+    let query = {
+      size: 0,
+      query: es.query.filter(req.model.definition, filters, filterExclude),
+      aggregations: aggregations
+    }
+
+    es.client.search({
+      index: `${config.project}-${req.modelId}`,
+      body: query
+    }).then(results => {
+      res.json(results)
+    }).catch(next)
+  })
+
   return router
 }
 

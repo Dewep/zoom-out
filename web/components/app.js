@@ -5,18 +5,29 @@ import { updateProject } from '../actions'
 import TopBar from './topbar'
 import Facets from './facets'
 import ListView from './listview'
+import ChartsView from './chartsview'
 
 class App extends Component {
   constructor(props) {
     super(props)
+    let storeState = this.props.store.getState()
     this.state = {
-      store: this.props.store.getState()
+      projectName: storeState.project.name,
+      currentModel: storeState.project.currentModel,
+      currentView: storeState.project.currentView
     }
   }
 
   componentDidMount() {
     this.unsubscribeStore = this.props.store.subscribe(() => {
-      this.setState({ store: this.props.store.getState() })
+      let storeState = this.props.store.getState()
+      if (this.state.projectName !== storeState.project.name || this.state.currentModel !== storeState.project.currentModel || this.state.currentView !== storeState.project.currentView) {
+        this.setState({
+          projectName: storeState.project.name,
+          currentModel: storeState.project.currentModel,
+          currentView: storeState.project.currentView
+        })
+      }
     })
 
     updateProject(this.props.store)
@@ -27,7 +38,7 @@ class App extends Component {
   }
 
   render() {
-    if (!this.state.store.project.name) {
+    if (!this.state.projectName) {
       return (
         <div class="app-container">
           <i>Loading...</i>
@@ -35,13 +46,21 @@ class App extends Component {
       )
     }
 
-    if (!this.state.store.project.currentModel) {
+    if (!this.state.currentModel) {
       return (
         <div class="app-container">
-          <h1>{ this.state.store.project.name }</h1>
+          <h1>{ this.state.projectName }</h1>
           <i>No model found.</i>
         </div>
       )
+    }
+
+    let view = ''
+
+    if (this.state.currentView === 'charts') {
+      view = (<ChartsView store={ this.props.store } />)
+    } else {
+      view = (<ListView store={ this.props.store } />)
     }
 
     return (
@@ -49,7 +68,7 @@ class App extends Component {
         <TopBar store={ this.props.store } />
         <section class="page-container">
           <Facets store={ this.props.store } />
-          <ListView store={ this.props.store } />
+          { view }
         </section>
       </div>
     )

@@ -1,7 +1,7 @@
 import Inferno from 'inferno'
 import Component from 'inferno-component'
 import _ from 'lodash'
-import { updateFacets, toggleFilter } from '../actions'
+import { updateFacets, toggleFilter, updateView } from '../actions'
 import { model } from '../../common'
 
 class Facets extends Component {
@@ -12,6 +12,7 @@ class Facets extends Component {
       loading: false,
       filters: _.cloneDeep(storeState.filters),
       currentModel: storeState.project.currentModel,
+      currentView: storeState.project.currentView,
       model: storeState.project.models[storeState.project.currentModel],
       total: storeState.facets.total,
       buckets: _.cloneDeep(storeState.facets.buckets)
@@ -28,6 +29,12 @@ class Facets extends Component {
           loading: false,
           total: storeState.facets.total,
           buckets: _.cloneDeep(storeState.facets.buckets)
+        })
+      }
+
+      if (this.state.currentView != storeState.project.currentView) {
+        this.setState({
+          currentView: storeState.project.currentView
         })
       }
 
@@ -75,6 +82,12 @@ class Facets extends Component {
     this.props.store.dispatch(toggleFilter(field, key))
   }
 
+  updateCurrentView(view) {
+    if (this.state.currentView !== view) {
+      this.props.store.dispatch(updateView(view))
+    }
+  }
+
   render() {
     let facetsList = []
 
@@ -104,8 +117,8 @@ class Facets extends Component {
         <nav class="facets">
           <header>
             <div class="selection-group">
-              <button type="button" class="active">list</button>
-              <button type="button">charts</button>
+              <button type="button" className={ this.state.currentView === 'list' ? 'active' : '' } onClick={ this.updateCurrentView.bind(this, 'list') }>list</button>
+              <button type="button" className={ this.state.currentView === 'charts' ? 'active' : '' } onClick={ this.updateCurrentView.bind(this, 'charts') }>charts</button>
             </div>
             <div class="total">
               <em>{ this.state.total }</em> result{ this.state.total > 0 ? 's' : '' }
