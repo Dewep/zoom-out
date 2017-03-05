@@ -20,19 +20,33 @@ export function receiveProject(name, models) {
   }
 }
 
-export function receiveFacets(facets) {
+export function receiveFacets(total, buckets) {
   return {
     type: RECEIVE_FACETS,
-    facets: facets
+    total: total,
+    buckets: buckets
   }
 }
 
 export function updateProject(store) {
   axios.get('/api/models/', {
     headers: {
-      Authorization: store.getState().apiKey
+      Authorization: store.getState().project.apiKey
     }
   }).then(response => {
     store.dispatch(receiveProject(response.data.project, response.data.models))
+  }).catch(console.error)
+}
+
+export function updateFacets(store) {
+  let state = store.getState()
+  axios.post('/api/models/' + state.project.currentModel + '/query/facets/', {
+    filters: state.filters
+  }, {
+    headers: {
+      Authorization: state.project.apiKey
+    }
+  }).then(response => {
+    store.dispatch(receiveFacets(response.data.total, response.data.buckets))
   }).catch(console.error)
 }

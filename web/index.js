@@ -1,24 +1,16 @@
 import Inferno from 'inferno'
 import { createStore } from 'redux'
 import reducer from './reducers'
-import App from './app'
+import { App } from './components'
 
-const store = createStore(reducer, {
-  apiKey: 'drpanda-key',
-  filters: {},
-  project: {
-    name: null,
-    models: {}
-  },
-  facets: {
-    loaded: true,
-    total: 0,
-    buckets: []
-  }
-})
+const store = createStore(reducer)
 
 store.subscribe(() =>
-  console.log('store-update', JSON.stringify(store.getState()))
+  console.log('store-updated', store.getState())
 )
+
+if (window) {
+  window.store = store
+}
 
 Inferno.render(<App store={ store } />, document.getElementById('app'))
