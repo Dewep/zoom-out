@@ -1,0 +1,70 @@
+section.list-view {
+  display: flex;
+  overflow: hidden;
+
+  & > ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex: 0 0 40%;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    li {
+      display: block;
+      background: $color-list-item-bg;
+      color: $color-list-item;
+      padding: 10px 15px 10px 11px;
+      border-left: 4px solid $color-list-item-bg;
+      cursor: pointer;
+
+      &:hover {
+        color: $color-list-item-hover;
+        background: $color-list-item-hover-bg;
+        border-left-color: $color-list-item-hover-bg;
+      }
+
+      &.active, &.active:hover {
+        color: $color-list-item-hover;
+        background: $color-list-item-hover-bg;
+        border-left-color: $color-important;
+      }
+
+      .meta {
+        float: right;
+        text-align: right;
+        color: $color-second-text;
+      }
+
+      .title {
+        color: $color-link;
+        margin-bottom: 5px;
+        display: block;
+      }
+    }
+  }
+
+  & > article {
+    flex: 1;
+    display: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 15px;
+
+    &.active {
+      display: block;
+    }
+
+    table {
+      tr th {
+        width: 40%;
+        font-weight: 100;
+        color: $color-second-text;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 28px;
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+@import 'theme-github';
+
+body {
+  background: $color-bg;
+  color: $color-text;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+}
+
+a, a:link, a:visited {
+  color: $color-link;
+  text-decoration: none;
+}
+a:hover, a:focus, a:active {
+  text-decoration: underline;
+}
+
+em {
+  font-weight: normal;
+  font-style: normal;
+  color: $color-important;
+}
+
+button, input, optgroup, select, textarea {
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  display: inline-block;
+  padding: 4px 10px;
+  margin-bottom: 0;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  background: $color-button-bg;
+  color: $color-button;
+  border: 1px solid $color-button-border;
+  border-radius: 4px;
+
+  &.active, &:hover {
+    color: $color-button-active;
+    background: $color-button-active-gb;
+  }
+}
+
+table {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  border-collapse: collapse;
+
+  tr th, tr td {
+    text-align: left;
+    line-height: 20px;
+  }
+}
