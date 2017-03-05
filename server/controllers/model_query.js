@@ -6,10 +6,8 @@ const es = require('../elasticsearch')
 let modelQueryRouter = () => {
   let router = express.Router()
 
-  router.get('/facets/', (req, res, next) => {
-    let filters = {
-      'device.os': ['android']
-    }
+  router.post('/facets/', (req, res, next) => {
+    let filters = req.body.filters || {}
 
     let facets = {}
     _.forEach(req.model.facets, facet => {
@@ -31,6 +29,7 @@ let modelQueryRouter = () => {
 
     let body = {
       size: 0,
+      query: es.query.filter(req.model.definition, filters),
       aggregations: {
         facets: {
           global: {},
@@ -43,11 +42,10 @@ let modelQueryRouter = () => {
       index: `${config.project}-${req.modelId}`,
       body: body
     }).then(results => {
-      let facetsBuckets = []
+      let facetsBuckets = {}
       _.forEach(req.model.facets, facet => {
         if (results.aggregations.facets[facet]) {
-          facetsBuckets.push({
-            key: facet,
+          facetsBuckets[facet] = {
             total: results.aggregations.facets[facet].doc_count,
             buckets: _.map(results.aggregations.facets[facet].values.buckets, b => {
               return {
@@ -55,12 +53,37 @@ let modelQueryRouter = () => {
                 total: b.doc_count
               }
             })
-          })
+          }
         }
       })
       res.json({
-        total: results.aggregations.facets.doc_count,
+        total: results.hits.total,
         buckets: facetsBuckets
+      })
+    }).catch(next)
+  })
+
+  router.post('/list/', (req, res, next) => {
+    let filters = req.body.filters || {}
+    let page = req.body.page || 1
+
+    let body = {
+      size: 25,
+      from: 25 * (page - 1),
+      query: es.query.filter(req.model.definition, filters)
+    }
+
+    es.client.search({
+      index: `${config.project}-${req.modelId}`,
+      body: body
+    }).then(results => {
+      res.json({
+        total: results.hits.total,
+        data: _.map(results.hits.hits, hit => {
+          let item = hit._source
+          item._id = hit._id
+          return item
+        })
       })
     }).catch(next)
   })
