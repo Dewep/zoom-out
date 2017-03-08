@@ -1,6 +1,7 @@
 module.exports = {
   apiKeys: ['drpanda-key'],
   project: 'drpanda',
+  archiver: 'archives',
   models: {
     message: {
       definition: {

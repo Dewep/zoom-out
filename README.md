@@ -16,6 +16,7 @@ See example config file here: `server/config/config.example.js`.
 
 - `apiKeys`: API keys for push and queries events
 - `project`: project name
+- `archiver`: directory for the archives (the directory must be existed - set to `null` to not archive the events pushed)
 - `models`: list of models
 - `models.XYZ.definition`: defintion of the model (types available: 'boolean', 'date', 'ip', 'keyword', 'byte', 'short', 'integer', 'long', 'double', 'object')
 - `models.XYZ.facets`: array of fields for the facets (filters present in the sidebar)
