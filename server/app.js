@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const path = require('path')
 
 const controllers = require('./controllers')
 
@@ -18,7 +19,7 @@ app.use('/api', controllers.auth.authorizationCheck)
 
 app.use('/api/models', controllers.model.router())
 
-app.use(express.static('web/public'))
+app.use(express.static(path.join(__dirname, '..', 'web', 'public')))
 
 app.use((err, req, res, next) => {
   res.status(err.status || 400)

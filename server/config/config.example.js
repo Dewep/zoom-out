@@ -31,7 +31,8 @@ module.exports = {
         meta: '{date}'
       },
       charts: [
-        { type: 'pie', split: { field: 'device.os' } }
+        { type: 'pie', width: 0.5, title: 'Team distribution', field: 'team' },
+        { type: 'pie', width: 0.5, title: 'Device OS distribution', field: 'device.os' }
       ]
     }
   },

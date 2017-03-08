@@ -48,9 +48,29 @@ You must provide an `Authorization` key to use the APi routes (defined in the `a
 ## Getting started
 
 - `cp server/config/config.example.js server/config/config.local.js` (+ edit the configuration for your needs)
-- `npm install` + `npm build` + `npm start`
+- `npm install` + `npm run build` + `npm start`
 - Push your events: `curl -XPOST http://127.0.0.1:3000/api/models/message/push -H 'Authorization: my-api-key' -H 'Content-type: application/json' -d@data/my_message_event.json`
 - Go on `http://127.0.0.1:3000`
+
+## Systemctl service example
+
+```
+# /etc/systemd/system/zoom-out-drpanda.service
+
+[Service]
+ExecStart=/usr/bin/node /home/zoom-out-drpanda/server/app.js
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=zoom-out-drpanda
+User=root
+Group=root
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
+```
 
 ## ElasticSearch (docker example in dev mode)
 
