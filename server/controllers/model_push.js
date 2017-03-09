@@ -12,10 +12,15 @@ let archivers = {}
 let archive = (modelName, event) => {
   if (config.archiver) {
     if (!archivers[modelName]) {
+      archivesDir = config.archiver
+      if (config.archiver[0] !== '/') {
+        archivesDir = path.join(__dirname, '..', '..', archivesDir)
+      }
+
       archivers[modelName] = new winston.Logger({
         transports: [
           new winston.transports.DailyRotateFile({
-            filename: path.join(config.archiver, `${modelName}.log`),
+            filename: path.join(archivesDir, `${modelName}.log`),
             datePattern: 'yyyy-MM-dd.',
             prepend: true,
             zippedArchive: true,
@@ -62,15 +67,15 @@ let modelPushRouter = () => {
 
     Promise.all(_.map(req.body, event => {
       return indexEvent(req.modelId, req.model.definition, event)
-        .then(doc => success.push(doc._id))
-        .catch(err => error.push(err))
-    }))
+        .then(doc => data.success.push(doc._id))
+        .catch(err => data.error.push(err))
+    })).then(() => {
+      if (data.error.length) {
+        res.status(400)
+      }
 
-    if (error.length) {
-      res.status(400)
-    }
-
-    res.json(data)
+      res.json(data)
+    })
   })
 
   return router

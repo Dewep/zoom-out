@@ -27,20 +27,24 @@ class ListView extends Component {
       if (this.state.currentModel != storeState.project.currentModel) {
         this.setState({
           currentModel: storeState.project.currentModel,
-          model: storeState.project.models[storeState.project.currentModel]
-        })
+          model: storeState.project.models[storeState.project.currentModel],
+          loading: true,
+          page: 1,
+          results: [],
+          selected: -1
+        }, this.updateResults.bind(this))
         updateResultsNeeded = true
       }
 
       if (!_.isEqual(this.state.filters, storeState.filters)) {
         this.setState({
-          filters: _.cloneDeep(storeState.filters)
-        })
+          filters: _.cloneDeep(storeState.filters),
+          loading: true,
+          page: 1,
+          results: [],
+          selected: -1
+        }, this.updateResults.bind(this))
         updateResultsNeeded = true
-      }
-
-      if (updateResultsNeeded) {
-        this.setState({ loading: true, page: 0, results: [], selected: -1 }, this.updateResults.bind(this))
       }
     })
 
