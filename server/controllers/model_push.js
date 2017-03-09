@@ -31,25 +31,46 @@ let archive = (modelName, event) => {
   }
 }
 
+let indexEvent = (modelId, modelDefinition, event) => {
+  let data = es.types.getBody(modelDefinition, event)
+
+  if (!_.size(data)) {
+    return Promise.reject(new Error('Empty body'))
+  }
+
+  return es.client.index({
+    index: `${config.project}-${modelId}`,
+    type: modelId,
+    body: data
+  })
+}
+
 let modelPushRouter = () => {
   let router = express.Router()
 
   router.post('/', (req, res, next) => {
-    let data = es.types.getBody(req.model.definition, req.body)
-
-    if (!_.size(data)) {
-      return next(new Error('Empty body'))
-    }
-
     archive(req.modelId, req.body)
 
-    es.client.index({
-      index: `${config.project}-${req.modelId}`,
-      type: req.modelId,
-      body: data
-    }).then(doc => {
-      res.json({id: doc._id})
-    }).catch(next)
+    if (!_.isArray(req.body)) {
+      req.body = [req.body]
+    }
+
+    let data = {
+      success: [],
+      error: []
+    }
+
+    Promise.all(_.map(req.body, event => {
+      return indexEvent(req.modelId, req.model.definition, event)
+        .then(doc => success.push(doc._id))
+        .catch(err => error.push(err))
+    }))
+
+    if (error.length) {
+      res.status(400)
+    }
+
+    res.json(data)
   })
 
   return router
