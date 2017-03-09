@@ -1,6 +1,7 @@
 import Inferno from 'inferno'
 import Component from 'inferno-component'
 import _ from 'lodash'
+import { updateModel } from '../actions'
 
 class TopBar extends Component {
   constructor(props) {
@@ -23,7 +24,9 @@ class TopBar extends Component {
 
   editCurrentModel(model, event) {
     event.preventDefault()
-    console.log('editCurrentModel', model)
+    if (this.state.store.project.currentModel !== model) {
+      this.props.store.dispatch(updateModel(model))
+    }
   }
 
   render() {

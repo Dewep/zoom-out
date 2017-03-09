@@ -2,6 +2,7 @@ const axios = require('axios')
 
 export const TOGGLE_FILTER = 'TOGGLE_FILTER'
 export const UPDATE_VIEW = 'UPDATE_VIEW'
+export const UPDATE_MODEL = 'UPDATE_MODEL'
 export const RECEIVE_PROJECT = 'RECEIVE_PROJECT'
 export const RECEIVE_FACETS = 'RECEIVE_FACETS'
 
@@ -17,6 +18,14 @@ export function updateView(view) {
   return {
     type: UPDATE_VIEW,
     view: view
+  }
+}
+
+
+export function updateModel(model) {
+  return {
+    type: UPDATE_MODEL,
+    model: model
   }
 }
 

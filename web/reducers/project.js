@@ -1,4 +1,4 @@
-import { RECEIVE_PROJECT, UPDATE_VIEW } from '../actions'
+import { RECEIVE_PROJECT, UPDATE_VIEW, UPDATE_MODEL } from '../actions'
 
 const project = (state = {
     apiKey: 'drpanda-key',
@@ -30,6 +30,10 @@ const project = (state = {
   } else if (action.type === UPDATE_VIEW) {
     if (action.view === 'list' || action.view === 'charts') {
       state.currentView = action.view
+    }
+  } else if (action.type === UPDATE_MODEL) {
+    if (state.models[action.model]) {
+      state.currentModel = action.model
     }
   }
 
