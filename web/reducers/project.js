@@ -1,6 +1,7 @@
 import { RECEIVE_PROJECT, UPDATE_VIEW, UPDATE_MODEL } from '../actions'
 
 const project = (state = {
+    hostname: '',
     apiKey: 'drpanda-key',
     name: null,
     models: {},
@@ -19,9 +20,9 @@ const project = (state = {
       return false
     })
 
-    state.currentModel = null
-
     if (!currentModelFound) {
+      state.currentModel = null
+
       _.some(action.models, (modelConfig, modelName) => {
         state.currentModel = modelName
         return true
@@ -32,9 +33,7 @@ const project = (state = {
       state.currentView = action.view
     }
   } else if (action.type === UPDATE_MODEL) {
-    if (state.models[action.model]) {
-      state.currentModel = action.model
-    }
+    state.currentModel = action.model
   }
 
   return state

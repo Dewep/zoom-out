@@ -65,7 +65,7 @@ class ListView extends Component {
       page = 1
     }
 
-    axios.post('/api/models/' + this.state.currentModel + '/query/list/', {
+    axios.post(storeState.project.hostname + '/api/models/' + this.state.currentModel + '/query/list/', {
       filters: this.state.filters,
       page: page
     }, {

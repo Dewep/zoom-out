@@ -3,6 +3,7 @@ const axios = require('axios')
 export const TOGGLE_FILTER = 'TOGGLE_FILTER'
 export const UPDATE_VIEW = 'UPDATE_VIEW'
 export const UPDATE_MODEL = 'UPDATE_MODEL'
+export const UPDATE_FILTERS = 'UPDATE_FILTERS'
 export const RECEIVE_PROJECT = 'RECEIVE_PROJECT'
 export const RECEIVE_FACETS = 'RECEIVE_FACETS'
 
@@ -29,6 +30,13 @@ export function updateModel(model) {
   }
 }
 
+export function updateFilters(filters) {
+  return {
+    type: UPDATE_FILTERS,
+    filters: filters
+  }
+}
+
 export function receiveProject(name, models) {
   return {
     type: RECEIVE_PROJECT,
@@ -46,9 +54,10 @@ export function receiveFacets(total, buckets) {
 }
 
 export function updateProject(store) {
-  axios.get('/api/models/', {
+  let state = store.getState()
+  axios.get(state.project.hostname + '/api/models/', {
     headers: {
-      Authorization: store.getState().project.apiKey
+      Authorization: state.project.apiKey
     }
   }).then(response => {
     store.dispatch(receiveProject(response.data.project, response.data.models))
@@ -57,7 +66,7 @@ export function updateProject(store) {
 
 export function updateFacets(store) {
   let state = store.getState()
-  axios.post('/api/models/' + state.project.currentModel + '/query/facets/', {
+  axios.post(state.project.hostname + '/api/models/' + state.project.currentModel + '/query/facets/', {
     filters: state.filters
   }, {
     headers: {
