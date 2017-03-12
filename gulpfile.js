@@ -18,7 +18,9 @@ const webpackConfig = {
       loader: 'babel-loader'
     }]
   },
-  plugins: []
+  plugins: [
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+  ]
 }
 
 gulp.task('jsx', function () {
