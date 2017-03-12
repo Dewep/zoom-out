@@ -3,6 +3,8 @@ import Inferno from 'inferno'
 import Component from 'inferno-component'
 import _ from 'lodash'
 import PieChart from './charts/pie'
+import LineChart from './charts/line'
+import AreaChart from './charts/area'
 
 class ChartsView extends Component {
   constructor(props) {
@@ -44,14 +46,28 @@ class ChartsView extends Component {
       let style = {
         width: `calc(${width}% - 20px)`
       }
+      let charts = {
+        pie: PieChart,
+        line: LineChart,
+        area: AreaChart
+      }
+      let filters = _.clone(this.state.filters)
+      let ChartComponent = charts[chart.type] || null
+      if (chart.filters) {
+        _.forEach(chart.filters, (filterValue, filterKey) => {
+          filters[filterKey] = filterValue
+        })
+      }
 
-      if (chart.type === 'pie') {
+      if (ChartComponent) {
         return (
-          <PieChart store={ this.props.store } filters={ this.state.filters } model={ this.state.model } config={ chart } style={ style } />
+          <ChartComponent store={ this.props.store } filters={ filters } model={ this.state.model } config={ chart } style={ style } />
         )
       } else {
         style.textAlign = center
-        return (<p style={ style }>Chart not found!</p>)
+        return (
+          <p style={ style }>Chart not found!</p>
+        )
       }
     })
 

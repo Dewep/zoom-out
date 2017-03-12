@@ -1,8 +1,8 @@
-import axios from 'axios'
 import Inferno from 'inferno'
 import Component from 'inferno-component'
 import _ from 'lodash'
 import { generateChart } from './highcharts'
+import { queryAggregations } from './utils'
 
 class PieChart extends Component {
   renderChart(props) {
@@ -14,15 +14,7 @@ class PieChart extends Component {
         }
       }
     }
-    axios.post('/api/models/' + storeState.project.currentModel + '/query/aggregations/', {
-      filters: props.filters,
-      filterExclude: props.config.field,
-      aggregations: aggregations
-    }, {
-      headers: {
-        Authorization: storeState.project.apiKey
-      }
-    }).then(response => {
+    queryAggregations(storeState, props.filters, aggregations, props.config.field).then(response => {
       let series = [{
         name: props.config.field,
         data: _.map(response.data.aggregations.values.buckets, bucket => {

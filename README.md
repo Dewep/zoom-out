@@ -29,10 +29,37 @@ General configuration:
 
 - `type`: type of the chart
 - `width`: width ratio (between 0 and 1 - default to 1)
+- `fields`: override/add some filters
 
 Charts available:
 
 - `pie`: you must provide a `field` property
+- `line`: `x.label`, `x.field`, `x.period`, `x.tick`, `x.format`, `y.label`, `y.field`, `y.aggregation`, `split.field`
+- `area`: `stacked`, `x.label`, `x.field`, `x.period`, `x.tick`, `x.format`, `y.label`, `y.field`, `y.aggregation`, `split.field`
+
+Examples:
+
+```javascript
+let charts = [
+    {
+        type: 'area',
+        title: 'Number of successful connections by team',
+        stacked: true,
+        filters: { type: ['success'] },
+        x: { label: 'Date', field: 'date', period: { months: 1, days: 15 }, tick: { days: 1 }, format: 'D MMM' },
+        y: { label: 'Number of successful connections', field: '_uid', aggregation: 'value_count' },
+        split: { field: 'team' }
+    },
+    {
+        type: 'line',
+        title: 'Number of requests',
+        x: { label: 'Date', field: 'date', period: { months: 2 }, tick: { days: 1 }, format: 'D MMM' },
+        y: { label: 'Number of requests', field: '_uid', aggregation: 'value_count' },
+        split: { field: 'action' }
+    },
+    { type: 'pie', width: 0.5, title: 'Team distribution', field: 'team' }
+]
+```
 
 ## API routes
 

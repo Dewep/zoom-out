@@ -4,15 +4,7 @@ import _ from 'lodash'
 
 HighchartsExporting(Highcharts)
 
-export function generateChart(ref, type, series, title=null, tooltipValue=null, options={}) {
-  if (!tooltipValue) {
-    tooltipValue = '{point.y}'
-  }
-  let tooltipPrefix = '{series.name}: '
-  if (series.length < 2) {
-    tooltipPrefix = ''
-  }
-
+export function generateChart(ref, type, series, title=null, options={}) {
   let defaultOptions = {
     chart: {
       renderTo: ref,
@@ -25,9 +17,6 @@ export function generateChart(ref, type, series, title=null, tooltipValue=null, 
     },
     title: {
       text: title || null
-    },
-    tooltip: {
-      pointFormat: '<span style="color:{point.color}">\u25CF</span> ' + tooltipPrefix + '<b>' + tooltipValue + '</b><br/>'
     },
     series: series
   }
