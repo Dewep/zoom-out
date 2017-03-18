@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React from 'react'
 import _ from 'lodash'
+import StatChart from './charts/stat'
 import PieChart from './charts/pie'
 import LineChart from './charts/line'
 import AreaChart from './charts/area'
@@ -45,7 +46,11 @@ class ChartsView extends React.Component {
       let style = {
         width: `calc(${width}% - 20px)`
       }
+      if (chart.height) {
+        style.height = `${chart.height}px`
+      }
       let charts = {
+        stat: StatChart,
         pie: PieChart,
         line: LineChart,
         area: AreaChart
@@ -63,7 +68,7 @@ class ChartsView extends React.Component {
           <ChartComponent key={ `${this.state.currentModel}-${index}` } store={ this.props.store } filters={ filters } model={ this.state.model } config={ chart } style={ style } />
         )
       } else {
-        style.textAlign = center
+        style.textAlign = 'center'
         return (
           <p key={ `${this.state.currentModel}-${index}` } style={ style }>Chart not found!</p>
         )
