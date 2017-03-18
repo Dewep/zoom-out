@@ -1,4 +1,7 @@
 import React from 'react'
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import _ from 'lodash'
 import { updateProject } from '../actions'
 import TopBar from './topbar'
@@ -63,13 +66,15 @@ class App extends React.Component {
     }
 
     return (
-      <div className="app-container">
-        <TopBar store={ this.props.store } />
-        <section className="page-container">
-          <Facets store={ this.props.store } />
-          { view }
-        </section>
-      </div>
+      <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+        <div className="app-container">
+          <TopBar store={ this.props.store } />
+          <section className="page-container">
+            <Facets store={ this.props.store } />
+            { view }
+          </section>
+        </div>
+      </MuiThemeProvider>
     )
   }
 }

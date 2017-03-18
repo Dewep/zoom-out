@@ -12,5 +12,16 @@ section.charts-view {
     margin: 0;
     padding: 20px 10px;
     border-bottom: 1px solid $color-border;
+
+    &.stat {
+      height: auto;
+      text-align: center;
+      background: $color-list-item-bg;
+
+      em {
+        font-size: 25px;
+        font-weight: bold;
+      }
+    }
   }
 }

@@ -1,9 +1,8 @@
 import React from 'react'
 import _ from 'lodash'
-import { updateFacets, toggleFilter, updateView } from '../actions'
+import { updateFacets, toggleFilter, setFilter, updateView } from '../actions'
 import { model } from '../../common'
-
-import DatePicker from 'material-ui/DatePicker'
+import DateTimePicker from './datetimepicker'
 
 class Facets extends React.Component {
   constructor(props) {
@@ -83,6 +82,41 @@ class Facets extends React.Component {
     this.props.store.dispatch(toggleFilter(field, key))
   }
 
+  setDateFilter(field, name, date) {
+    let gt = null
+    let lt = null
+    if (this.state.filters[field]) {
+      gt = this.state.filters[field].length > 0 && this.state.filters[field][0] || null
+      lt = this.state.filters[field].length > 1 && this.state.filters[field][1] || null
+    }
+
+    if (name === 'gt') {
+      gt = date && date.toISOString() || null
+    } else if (name === 'lt') {
+      lt = date && date.toISOString() || null
+    } else {
+      return console.warn('Bad name setDateFilter:', field, name)
+    }
+
+    if (gt === null && lt === null) {
+      this.props.store.dispatch(setFilter(field, null))
+    } else {
+      this.props.store.dispatch(setFilter(field, [gt, lt]))
+    }
+  }
+
+  getDateFilter(field, name) {
+    if (this.state.filters[field]) {
+      if (name === 'gt' && this.state.filters[field].length > 0) {
+        return new Date(this.state.filters[field][0])
+      }
+      if (name === 'lt' && this.state.filters[field].length > 1) {
+        return new Date(this.state.filters[field][1])
+      }
+    }
+    return null
+  }
+
   updateCurrentView(view) {
     if (this.state.currentView !== view) {
       this.props.store.dispatch(updateView(view))
@@ -97,7 +131,7 @@ class Facets extends React.Component {
 
       if (field && field.type === 'keyword' && this.state.buckets[fieldName]) {
         const values = _.map(this.state.buckets[fieldName].buckets, bucket =>
-          <li key={ bucket.key } onClick={ this.toggleFilter.bind(this, fieldName, bucket.key) } className={ this.isFacetFieldActive(fieldName, bucket.key) ? 'active' : '' }>
+          <li key={ `${this.state.currentModel}-${bucket.key}` } onClick={ this.toggleFilter.bind(this, fieldName, bucket.key) } className={ this.isFacetFieldActive(fieldName, bucket.key) ? 'active' : '' }>
             <span className="facet-check"></span>
             <span className="facet-value">{ bucket.key }</span>
             <span className="facet-count">{ bucket.total }</span>
@@ -116,7 +150,7 @@ class Facets extends React.Component {
         }
 
         facetsList.push(
-          <li key={ fieldName } className="facet">
+          <li key={ `${this.state.currentModel}-${fieldName}` } className="facet">
             <span className="facet-name">{ fieldName }</span>
             <ul>
               { values }
@@ -126,13 +160,17 @@ class Facets extends React.Component {
         )
       } else if (field && field.type === 'date') {
         facetsList.push(
-          <li key={ fieldName } className="facet">
+          <li key={ `${this.state.currentModel}-${fieldName}` } className="facet">
             <span className="facet-name">{ fieldName }</span>
+            { 'Greater than: ' }
+            <DateTimePicker onChange={ this.setDateFilter.bind(this, fieldName) } name={ 'gt' } value={ this.getDateFilter(field, 'gt') } />
+            <br />
+            { 'Less than: ' }
+            <DateTimePicker onChange={ this.setDateFilter.bind(this, fieldName) } name={ 'lt' } value={ this.getDateFilter(field, 'lt') } />
           </li>
         )
       }
     })
-    //            <DatePicker hintText="Start date" />
 
     return (
       <section className="sidebar">

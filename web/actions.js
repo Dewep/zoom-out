@@ -1,6 +1,7 @@
 const axios = require('axios')
 
 export const TOGGLE_FILTER = 'TOGGLE_FILTER'
+export const SET_FILTER = 'SET_FILTER'
 export const UPDATE_VIEW = 'UPDATE_VIEW'
 export const UPDATE_MODEL = 'UPDATE_MODEL'
 export const UPDATE_FILTERS = 'UPDATE_FILTERS'
@@ -10,6 +11,14 @@ export const RECEIVE_FACETS = 'RECEIVE_FACETS'
 export function toggleFilter(field, value) {
   return {
     type: TOGGLE_FILTER,
+    field: field,
+    value: value
+  }
+}
+
+export function setFilter(field, value) {
+  return {
+    type: SET_FILTER,
     field: field,
     value: value
   }

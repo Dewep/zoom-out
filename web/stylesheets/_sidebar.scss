@@ -4,6 +4,10 @@ section.page-container {
     color: $color-navbar;
     padding: 10px;
 
+    a, a:link, a:visited {
+      color: $color-navbar-link;
+    }
+
     nav.selection-view {
       text-align: center;
     }

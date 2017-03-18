@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { createStore } from 'redux'
 import reducer from './reducers'
 import { updateModel, updateView, updateFilters } from './actions'
@@ -23,5 +24,8 @@ watchStoreForLocation(store)
 if (window) {
   window.store = store
 }
+
+
+injectTapEventPlugin()
 
 ReactDOM.render(<App store={ store } />, document.getElementById('app'))
