@@ -17,6 +17,11 @@ let modelQueryRouter = () => {
         facets[facet] = {
           filter: es.query.filter(req.model.definition, filters, facet),
           aggregations: {
+            missings: {
+              missing: {
+                field: facet
+              }
+            },
             values: {
               terms: {
                 field: facet
@@ -47,6 +52,9 @@ let modelQueryRouter = () => {
         if (results.aggregations.facets[facet]) {
           facetsBuckets[facet] = {
             total: results.aggregations.facets[facet].doc_count,
+            missings: results.aggregations.facets[facet].missings.doc_count,
+            error_rate: results.aggregations.facets[facet].values.doc_count_error_upper_bound,
+            others: results.aggregations.facets[facet].values.sum_other_doc_count,
             buckets: _.map(results.aggregations.facets[facet].values.buckets, b => {
               return {
                 key: b.key,
@@ -71,6 +79,10 @@ let modelQueryRouter = () => {
       size: 25,
       from: 25 * (page - 1),
       query: es.query.filter(req.model.definition, filters)
+    }
+
+    if (req.body.sort) {
+      body.sort = req.body.sort
     }
 
     es.client.search({

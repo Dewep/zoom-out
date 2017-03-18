@@ -11,11 +11,34 @@ let filter = (config, filters, exclude) => {
       let field = getField(config, key)
 
       if (field && ['boolean', 'ip', 'keyword'].indexOf(field.type) !== -1) {
-        and.push({
-          terms: {
-            [key]: values
-          }
-        })
+        if (_.includes(values, null)) {
+          and.push({
+            bool: {
+              should: [
+                {
+                  bool: {
+                    must_not: {
+                      exists: {
+                        field: key
+                      }
+                    }
+                  }
+                },
+                {
+                  terms: {
+                    [key]: _.filter(values, v => v !== null)
+                  }
+                }
+              ]
+            }
+          })
+        } else {
+          and.push({
+            terms: {
+              [key]: values
+            }
+          })
+        }
       } else if (field && ['date', 'byte', 'short', 'integer', 'long', 'double'].indexOf(field.type) !== -1) {
         if (values.length === 1) {
           and.push({
