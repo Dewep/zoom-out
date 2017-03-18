@@ -1,4 +1,5 @@
-import Inferno from 'inferno'
+import React from 'react'
+import ReactDOM from 'react-dom'
 import { createStore } from 'redux'
 import reducer from './reducers'
 import { updateModel, updateView, updateFilters } from './actions'
@@ -23,4 +24,4 @@ if (window) {
   window.store = store
 }
 
-Inferno.render(<App store={ store } />, document.getElementById('app'))
+ReactDOM.render(<App store={ store } />, document.getElementById('app'))

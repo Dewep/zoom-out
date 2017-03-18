@@ -1,5 +1,4 @@
-import Inferno from 'inferno'
-import Component from 'inferno-component'
+import React from 'react'
 import _ from 'lodash'
 import { updateProject } from '../actions'
 import TopBar from './topbar'
@@ -7,7 +6,7 @@ import Facets from './facets'
 import ListView from './listview'
 import ChartsView from './chartsview'
 
-class App extends Component {
+class App extends React.Component {
   constructor(props) {
     super(props)
     let storeState = this.props.store.getState()
@@ -40,7 +39,7 @@ class App extends Component {
   render() {
     if (!this.state.projectName) {
       return (
-        <div class="app-container">
+        <div className="app-container">
           <i>Loading...</i>
         </div>
       )
@@ -48,7 +47,7 @@ class App extends Component {
 
     if (!this.state.currentModel) {
       return (
-        <div class="app-container">
+        <div className="app-container">
           <h1>{ this.state.projectName }</h1>
           <i>No model found.</i>
         </div>
@@ -64,9 +63,9 @@ class App extends Component {
     }
 
     return (
-      <div class="app-container">
+      <div className="app-container">
         <TopBar store={ this.props.store } />
-        <section class="page-container">
+        <section className="page-container">
           <Facets store={ this.props.store } />
           { view }
         </section>

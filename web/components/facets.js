@@ -1,10 +1,11 @@
-import Inferno from 'inferno'
-import Component from 'inferno-component'
+import React from 'react'
 import _ from 'lodash'
 import { updateFacets, toggleFilter, updateView } from '../actions'
 import { model } from '../../common'
 
-class Facets extends Component {
+import DatePicker from 'material-ui/DatePicker'
+
+class Facets extends React.Component {
   constructor(props) {
     super(props)
     let storeState = this.props.store.getState()
@@ -96,31 +97,52 @@ class Facets extends Component {
 
       if (field && field.type === 'keyword' && this.state.buckets[fieldName]) {
         const values = _.map(this.state.buckets[fieldName].buckets, bucket =>
-          <li onClick={ this.toggleFilter.bind(this, fieldName, bucket.key) } className={ this.isFacetFieldActive(fieldName, bucket.key) ? 'active' : '' }>
-            <span class="facet-check"></span>
-            <span class="facet-value">{ bucket.key }</span>
-            <span class="facet-count">{ bucket.total }</span>
+          <li key={ bucket.key } onClick={ this.toggleFilter.bind(this, fieldName, bucket.key) } className={ this.isFacetFieldActive(fieldName, bucket.key) ? 'active' : '' }>
+            <span className="facet-check"></span>
+            <span className="facet-value">{ bucket.key }</span>
+            <span className="facet-count">{ bucket.total }</span>
           </li>
         )
 
+        let missings = ''
+        if (this.state.buckets[fieldName].missings) {
+          missings = (
+            <li onClick={ this.toggleFilter.bind(this, fieldName, null) } className={ this.isFacetFieldActive(fieldName, null) ? 'active' : '' }>
+              <span className="facet-check"></span>
+              <span className="facet-value"><i>Missings</i></span>
+              <span className="facet-count">{ this.state.buckets[fieldName].missings }</span>
+            </li>
+          )
+        }
+
         facetsList.push(
-          <li class="facet">
-            <span class="facet-name">{ fieldName }</span>
-            <ul>{ values }</ul>
+          <li key={ fieldName } className="facet">
+            <span className="facet-name">{ fieldName }</span>
+            <ul>
+              { values }
+              { missings }
+            </ul>
+          </li>
+        )
+      } else if (field && field.type === 'date') {
+        facetsList.push(
+          <li key={ fieldName } className="facet">
+            <span className="facet-name">{ fieldName }</span>
           </li>
         )
       }
     })
+    //            <DatePicker hintText="Start date" />
 
     return (
-      <section class="sidebar">
-        <nav class="facets">
+      <section className="sidebar">
+        <nav className="facets">
           <header>
-            <div class="selection-group">
+            <div className="selection-group">
               <button type="button" className={ this.state.currentView === 'list' ? 'active' : '' } onClick={ this.updateCurrentView.bind(this, 'list') }>list</button>
               <button type="button" className={ this.state.currentView === 'charts' ? 'active' : '' } onClick={ this.updateCurrentView.bind(this, 'charts') }>charts</button>
             </div>
-            <div class="total">
+            <div className="total">
               <em>{ this.state.total }</em> result{ this.state.total > 0 ? 's' : '' }
               { this.state.loading ? ' (loading)' : '' }
             </div>

@@ -1,9 +1,8 @@
 import axios from 'axios'
-import Inferno from 'inferno'
-import Component from 'inferno-component'
+import React from 'react'
 import _ from 'lodash'
 
-class ListView extends Component {
+class ListView extends React.Component {
   constructor(props) {
     super(props)
     let storeState = this.props.store.getState()
@@ -67,6 +66,7 @@ class ListView extends Component {
 
     axios.post(storeState.project.hostname + '/api/models/' + this.state.currentModel + '/query/list/', {
       filters: this.state.filters,
+      sort: this.state.model.list.sort,
       page: page
     }, {
       headers: {
@@ -96,11 +96,17 @@ class ListView extends Component {
         _.forEach(this.getTableLines(value, `${prefix}${key}.`), i => items.push(i))
       } else if (_.isArray(value)) {
         items.push(
-          <tr><th>{ prefix + key }</th><td>{ value.join(', ') }</td></tr>
+          <tr key={ prefix + key }>
+            <th>{ prefix + key }</th>
+            <td>{ value.join(', ') }</td>
+          </tr>
         )
       } else {
         items.push(
-          <tr><th>{ prefix + key }</th><td>{ value }</td></tr>
+          <tr key={ prefix + key }>
+            <th>{ prefix + key }</th>
+            <td>{ value }</td>
+          </tr>
         )
       }
     })
@@ -115,26 +121,26 @@ class ListView extends Component {
     let selected = ''
 
     let itemsList = _.map(this.state.results, (item, index) =>
-      <li className={ index === this.state.selected ? 'active' : '' } onClick={ this.select.bind(this, index) }>
-        <span class="meta">{ templateMeta(item) }</span>
-        <span class="title">{ templateTitle(item) }</span>
-        <span class="description">{ templateDescription(item) }</span>
+      <li key={ item._id } className={ index === this.state.selected ? 'active' : '' } onClick={ this.select.bind(this, index) }>
+        <span className="meta">{ templateMeta(item) }</span>
+        <span className="title">{ templateTitle(item) }</span>
+        <span className="description">{ templateDescription(item) }</span>
       </li>
     )
 
     if (this.state.loading) {
       itemsList.push(
-        <li>Loading...</li>
+        <li key="_loading">Loading...</li>
       )
     } else if (this.state.loadMore) {
       itemsList.push(
-        <li onClick={ this.updateResults.bind(this) }>Load more</li>
+        <li key="_load_more" onClick={ this.updateResults.bind(this) }>Load more</li>
       )
     }
 
     if (this.state.selected >= 0 && this.state.selected < this.state.results.length) {
       selected = (
-        <article class="active">
+        <article className="active">
           <h2>{ templateTitle(this.state.results[this.state.selected]) }</h2>
           <table>
             <tbody>{ this.getTableLines(this.state.results[this.state.selected]) }</tbody>
@@ -144,7 +150,7 @@ class ListView extends Component {
     }
 
     return (
-      <section class="general-view list-view">
+      <section className="general-view list-view">
         <ul>{ itemsList }</ul>
         { selected }
       </section>

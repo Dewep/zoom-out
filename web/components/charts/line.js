@@ -1,12 +1,11 @@
 import axios from 'axios'
-import Inferno from 'inferno'
-import Component from 'inferno-component'
+import React from 'react'
 import _ from 'lodash'
 import moment from 'moment'
 import { generateChart } from './highcharts'
 import { queryAggregations, buildDateRanges } from './utils'
 
-class LineChart extends Component {
+class LineChart extends React.Component {
   renderChart(props) {
     let storeState = props.store.getState()
     let aggregations = {

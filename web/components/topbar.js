@@ -1,9 +1,8 @@
-import Inferno from 'inferno'
-import Component from 'inferno-component'
+import React from 'react'
 import _ from 'lodash'
 import { updateModel } from '../actions'
 
-class TopBar extends Component {
+class TopBar extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -31,13 +30,13 @@ class TopBar extends Component {
 
   render() {
     const listModels = _.map(this.state.store.project.models, (modelConfig, modelName) =>
-      <li className={ this.state.store.project.currentModel === modelName ? 'active' : '' }>
+      <li key={ modelName } className={ this.state.store.project.currentModel === modelName ? 'active' : '' }>
         <a href="#" onClick={ this.editCurrentModel.bind(this, modelName) }>{ modelName }</a>
       </li>
     )
 
     return (
-      <header class="topbar">
+      <header className="topbar">
         <h1><a href="/">zoom-out <span>{ this.state.store.project.name }</span></a></h1>
         <ul>{ listModels }</ul>
       </header>

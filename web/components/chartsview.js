@@ -1,12 +1,11 @@
 import axios from 'axios'
-import Inferno from 'inferno'
-import Component from 'inferno-component'
+import React from 'react'
 import _ from 'lodash'
 import PieChart from './charts/pie'
 import LineChart from './charts/line'
 import AreaChart from './charts/area'
 
-class ChartsView extends Component {
+class ChartsView extends React.Component {
   constructor(props) {
     super(props)
     let storeState = this.props.store.getState()
@@ -41,7 +40,7 @@ class ChartsView extends Component {
   }
 
   render() {
-    let chartsList = _.map(this.state.model.charts, chart => {
+    let chartsList = _.map(this.state.model.charts, (chart, index) => {
       let width = (chart.width || 1.0) * 100
       let style = {
         width: `calc(${width}% - 20px)`
@@ -61,18 +60,18 @@ class ChartsView extends Component {
 
       if (ChartComponent) {
         return (
-          <ChartComponent store={ this.props.store } filters={ filters } model={ this.state.model } config={ chart } style={ style } />
+          <ChartComponent key={ `${this.state.currentModel}-${index}` } store={ this.props.store } filters={ filters } model={ this.state.model } config={ chart } style={ style } />
         )
       } else {
         style.textAlign = center
         return (
-          <p style={ style }>Chart not found!</p>
+          <p key={ `${this.state.currentModel}-${index}` } style={ style }>Chart not found!</p>
         )
       }
     })
 
     return (
-      <section class="general-view charts-view">
+      <section className="general-view charts-view">
         { chartsList }
       </section>
     )
