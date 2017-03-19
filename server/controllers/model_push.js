@@ -54,7 +54,9 @@ let modelPushRouter = () => {
   let router = express.Router()
 
   router.post('/', (req, res, next) => {
-    archive(req.modelId, req.body)
+    if (req.param('archive', '1') !== '0') {
+      archive(req.modelId, req.body)
+    }
 
     if (!_.isArray(req.body)) {
       req.body = [req.body]
