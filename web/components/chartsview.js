@@ -2,6 +2,7 @@ import axios from 'axios'
 import React from 'react'
 import _ from 'lodash'
 import StatChart from './charts/stat'
+import ColumnChart from './charts/column'
 import PieChart from './charts/pie'
 import LineChart from './charts/line'
 import AreaChart from './charts/area'
@@ -51,6 +52,7 @@ class ChartsView extends React.Component {
       }
       let charts = {
         stat: StatChart,
+        column: ColumnChart,
         pie: PieChart,
         line: LineChart,
         area: AreaChart

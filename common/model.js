@@ -20,6 +20,22 @@ let getField = (config, fieldName) => {
   return field
 }
 
+let getValueLabel = (field, value) => {
+  if (field && field.values && field.values[value] !== undefined) {
+    return field.values[value]
+  }
+
+  return value
+}
+
+let getFieldValueLabel = (config, fieldName, value) => {
+  let field = getField(config, fieldName)
+
+  return getValueLabel(field, value)
+}
+
 module.exports = {
-  getField: getField
+  getField: getField,
+  getValueLabel: getValueLabel,
+  getFieldValueLabel: getFieldValueLabel
 }

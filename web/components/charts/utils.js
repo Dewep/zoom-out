@@ -35,3 +35,16 @@ export function queryAggregations(storeState, filters, aggregations, filterExclu
     }
   })
 }
+
+export function getCategories(type) {
+  if (type === 'hours') {
+    return _.map(_.range(24), item => item.toString())
+  }
+  if (type === 'weekdays') {
+    return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  }
+  if (type === 'months') {
+    return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+  }
+  return type
+}

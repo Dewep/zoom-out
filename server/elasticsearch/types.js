@@ -3,6 +3,7 @@ const assert = require('assert')
 const common = require('../../common')
 
 let types = ['boolean', 'date', 'ip', 'keyword', 'byte', 'short', 'integer', 'long', 'double', 'object']
+let numbers = ['short', 'integer', 'long', 'double']
 
 let createMapping = (config, name) => {
   let generateProperties = (properties) => {
@@ -53,6 +54,16 @@ let getBody = (config, body, fullBody) => {
       }
     } else {
       data[propertyName] = property.default || null
+    }
+
+    if (data[propertyName] === undefined) {
+      data[propertyName] = null
+    }
+
+    if (data[propertyName] !== null && property.type === 'boolean') {
+      data[propertyName] = !!data[propertyName]
+    } else if (data[propertyName] !== null && _.includes(numbers, property.type)) {
+      data[propertyName] = +data[propertyName]
     }
   })
 

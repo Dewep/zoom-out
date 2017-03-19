@@ -129,11 +129,11 @@ class Facets extends React.Component {
     _.forEach(this.state.model.facets, fieldName => {
       let field = model.getField(this.state.model.definition, fieldName)
 
-      if (field && field.type === 'keyword' && this.state.buckets[fieldName]) {
+      if (field && (field.type === 'keyword' || field.type === 'boolean') && this.state.buckets[fieldName]) {
         const values = _.map(this.state.buckets[fieldName].buckets, bucket =>
           <li key={ `${this.state.currentModel}-${bucket.key}` } onClick={ this.toggleFilter.bind(this, fieldName, bucket.key) } className={ this.isFacetFieldActive(fieldName, bucket.key) ? 'active' : '' }>
             <span className="facet-check"></span>
-            <span className="facet-value">{ bucket.key }</span>
+            <span className="facet-value">{ model.getValueLabel(field, bucket.key) }</span>
             <span className="facet-count">{ bucket.total }</span>
           </li>
         )

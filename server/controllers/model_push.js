@@ -54,7 +54,7 @@ let modelPushRouter = () => {
   let router = express.Router()
 
   router.post('/', (req, res, next) => {
-    if (req.param('archive', '1') !== '0') {
+    if (req.query.archive !== '0') {
       archive(req.modelId, req.body)
     }
 
@@ -69,8 +69,17 @@ let modelPushRouter = () => {
 
     Promise.all(_.map(req.body, event => {
       return indexEvent(req.modelId, req.model.definition, event)
+        .catch((err) => {
+          if (err.displayName === 'RequestTimeout') {
+            return indexEvent(req.modelId, req.model.definition, event)
+          }
+          return Promise.reject(err)
+        })
         .then(doc => data.success.push(doc._id))
-        .catch(err => data.error.push(err))
+        .catch(err => {
+          console.error('Failed to index:', err, event)
+          data.error.push(err)
+        })
     })).then(() => {
       if (data.error.length) {
         res.status(400)
@@ -78,6 +87,41 @@ let modelPushRouter = () => {
 
       res.json(data)
     })
+  })
+
+  router.post('/migrate', (req, res, next) => {
+
+    if (!_.isArray(req.body)) {
+      req.body = [req.body]
+    }
+
+    let data = []
+
+    _.forEach(req.body, event => {
+      if (event.team !== 'demo' && event.team !== 'icl') {
+        return
+      }
+
+      console.log(event.attachement)
+      if (event.attachement) {
+        event.attachment = event.attachement
+        delete event.attachement
+      }
+
+      if (event.attachment && event.attachment.mime_type) {
+        event.with_styles = null
+      } else {
+        event.with_styles = !!event.with_styles
+      }
+
+      data.push(event)
+    })
+
+    if (data.length) {
+      archive(req.modelId, data)
+    }
+
+    res.json({})
   })
 
   return router
