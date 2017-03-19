@@ -33,16 +33,26 @@ let createMapping = (config, name) => {
   }
 }
 
-let getBody = (config, body) => {
+let getBody = (config, body, fullBody) => {
   let data = {}
 
+  if (!fullBody) {
+    fullBody = body
+  }
+
   _.forEach(config, (property, propertyName) => {
-    if (body[propertyName] !== undefined) {
-      if (property.type === 'object') {
-        data[propertyName] = getBody(property.properties, body[propertyName])
-      } else {
-        data[propertyName] = body[propertyName]
+    if (property.type === 'object') {
+      data[propertyName] = getBody(property.properties, body[propertyName] || {}, fullBody)
+    } else if (body[propertyName] !== undefined && body[propertyName] !== null) {
+      data[propertyName] = body[propertyName]
+    } else if (_.isFunction(property.default)) {
+      try {
+        data[propertyName] = property.default(fullBody)
+      } catch (e) {
+        data[propertyName] = null
       }
+    } else {
+      data[propertyName] = property.default || null
     }
   })
 
