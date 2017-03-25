@@ -1,46 +1,30 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import _ from 'lodash'
-import { updateProject } from '../actions'
+import { fetchAndLoad } from '../state/actions/project'
 import TopBar from './topbar'
 import Facets from './facets'
 import ListView from './listview'
 import ChartsView from './chartsview'
 
 class App extends React.Component {
-  constructor(props) {
-    super(props)
-    let storeState = this.props.store.getState()
-    this.state = {
-      projectName: storeState.project.name,
-      currentModel: storeState.project.currentModel,
-      currentView: storeState.project.currentView
+  componentDidMount() {
+    if (this.props.loading === null) {
+      this.props.fetchAndLoad()
     }
   }
 
-  componentDidMount() {
-    this.unsubscribeStore = this.props.store.subscribe(() => {
-      let storeState = this.props.store.getState()
-      if (this.state.projectName !== storeState.project.name || this.state.currentModel !== storeState.project.currentModel || this.state.currentView !== storeState.project.currentView) {
-        this.setState({
-          projectName: storeState.project.name,
-          currentModel: storeState.project.currentModel,
-          currentView: storeState.project.currentView
-        })
-      }
-    })
-
-    updateProject(this.props.store)
-  }
-
-  componentWillUnmount() {
-    this.unsubscribeStore()
+  componentDidUpdate() {
+    if (this.props.loading === null) {
+      this.props.fetchAndLoad()
+    }
   }
 
   render() {
-    if (!this.state.projectName) {
+    if (this.props.loading === true || this.props.loading === null) {
       return (
         <div className="app-container">
           <i>Loading...</i>
@@ -48,10 +32,10 @@ class App extends React.Component {
       )
     }
 
-    if (!this.state.currentModel) {
+    if (!this.props.currentModel) {
       return (
         <div className="app-container">
-          <h1>{ this.state.projectName }</h1>
+          <h1>{ this.props.name }</h1>
           <i>No model found.</i>
         </div>
       )
@@ -59,7 +43,7 @@ class App extends React.Component {
 
     let view = ''
 
-    if (this.state.currentView === 'charts') {
+    if (this.props.currentView === 'charts') {
       view = (<ChartsView store={ this.props.store } />)
     } else {
       view = (<ListView store={ this.props.store } />)
@@ -78,5 +62,12 @@ class App extends React.Component {
     )
   }
 }
+
+App = connect((state) => ({
+  loading: state.project.loading,
+  name: state.project.name,
+  currentModel: state.project.currentModel,
+  currentView: state.project.currentView
+}), { fetchAndLoad })(App)
 
 export default App

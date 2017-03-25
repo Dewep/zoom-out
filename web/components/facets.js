@@ -1,93 +1,44 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import _ from 'lodash'
-import { updateFacets, toggleFilter, setFilter, updateView } from '../actions'
+import { updateView } from '../state/actions/project'
+import { toggleFilter, setFilter } from '../state/actions/filters'
+import { fetchAndLoad } from '../state/actions/facets'
 import { model } from '../../common'
 import DateTimePicker from './datetimepicker'
 
 class Facets extends React.Component {
-  constructor(props) {
-    super(props)
-    let storeState = this.props.store.getState()
-    this.state = {
-      loading: false,
-      filters: _.cloneDeep(storeState.filters),
-      currentModel: storeState.project.currentModel,
-      currentView: storeState.project.currentView,
-      model: storeState.project.models[storeState.project.currentModel],
-      total: storeState.facets.total,
-      buckets: _.cloneDeep(storeState.facets.buckets)
-    }
-  }
-
   componentDidMount() {
-    this.unsubscribeStore = this.props.store.subscribe(() => {
-      let storeState = this.props.store.getState()
-      let updateFacetsNeeded = false
-
-      if (this.state.total !== storeState.facets.total || !_.isEqual(this.state.buckets, storeState.facets.buckets)) {
-        this.setState({
-          loading: false,
-          total: storeState.facets.total,
-          buckets: _.cloneDeep(storeState.facets.buckets)
-        })
-      }
-
-      if (this.state.currentView != storeState.project.currentView) {
-        this.setState({
-          currentView: storeState.project.currentView
-        })
-      }
-
-      if (this.state.currentModel != storeState.project.currentModel) {
-        this.setState({
-          currentModel: storeState.project.currentModel,
-          model: storeState.project.models[storeState.project.currentModel]
-        })
-        updateFacetsNeeded = true
-      }
-
-      if (!_.isEqual(this.state.filters, storeState.filters)) {
-        this.setState({
-          filters: _.cloneDeep(storeState.filters)
-        })
-        updateFacetsNeeded = true
-      }
-
-      if (updateFacetsNeeded) {
-        this.setState({ loading: true })
-        updateFacets(this.props.store)
-      }
-    })
-
-    let storeState = this.props.store.getState()
-    if (!storeState.facets.initialized) {
-      this.setState({ loading: true })
-      updateFacets(this.props.store)
+    if (this.props.loading === null) {
+      this.props.fetchAndLoad(this.props.currentModel, this.props.filters)
     }
   }
 
-  componentWillUnmount() {
-    this.unsubscribeStore()
+  componentDidUpdate() {
+    if (this.props.loading === null) {
+      this.props.fetchAndLoad(this.props.currentModel, this.props.filters)
+    }
   }
 
   isFacetFieldActive(field, key) {
-    if (!this.state.filters[field]) {
+    if (!this.props.filters[field]) {
       return false
     }
-    return this.state.filters[field].indexOf(key) !== -1
+
+    return this.props.filters[field].indexOf(key) !== -1
   }
 
   toggleFilter(field, key, event) {
     event.preventDefault()
-    this.props.store.dispatch(toggleFilter(field, key))
+    this.props.toggleFilter(field, key)
   }
 
   setDateFilter(field, name, date) {
     let gt = null
     let lt = null
-    if (this.state.filters[field]) {
-      gt = this.state.filters[field].length > 0 && this.state.filters[field][0] || null
-      lt = this.state.filters[field].length > 1 && this.state.filters[field][1] || null
+    if (this.props.filters[field]) {
+      gt = this.props.filters[field].length > 0 && this.props.filters[field][0] || null
+      lt = this.props.filters[field].length > 1 && this.props.filters[field][1] || null
     }
 
     if (name === 'gt') {
@@ -99,39 +50,39 @@ class Facets extends React.Component {
     }
 
     if (gt === null && lt === null) {
-      this.props.store.dispatch(setFilter(field, null))
+      this.props.setFilter(field, null)
     } else {
-      this.props.store.dispatch(setFilter(field, [gt, lt]))
+      this.props.setFilter(field, [gt, lt])
     }
   }
 
   getDateFilter(field, name) {
-    if (this.state.filters[field]) {
-      if (name === 'gt' && this.state.filters[field].length > 0) {
-        return new Date(this.state.filters[field][0])
+    if (this.props.filters[field]) {
+      if (name === 'gt' && this.props.filters[field].length > 0) {
+        return new Date(this.props.filters[field][0])
       }
-      if (name === 'lt' && this.state.filters[field].length > 1) {
-        return new Date(this.state.filters[field][1])
+      if (name === 'lt' && this.props.filters[field].length > 1) {
+        return new Date(this.props.filters[field][1])
       }
     }
     return null
   }
 
   updateCurrentView(view) {
-    if (this.state.currentView !== view) {
-      this.props.store.dispatch(updateView(view))
+    if (this.props.currentView !== view) {
+      this.props.updateView(view)
     }
   }
 
   render() {
     let facetsList = []
 
-    _.forEach(this.state.model.facets, fieldName => {
-      let field = model.getField(this.state.model.definition, fieldName)
+    _.forEach(this.props.model.facets, fieldName => {
+      let field = model.getField(this.props.model.definition, fieldName)
 
-      if (field && (field.type === 'keyword' || field.type === 'boolean') && this.state.buckets[fieldName]) {
-        const values = _.map(this.state.buckets[fieldName].buckets, bucket =>
-          <li key={ `${this.state.currentModel}-${bucket.key}` } onClick={ this.toggleFilter.bind(this, fieldName, bucket.key) } className={ this.isFacetFieldActive(fieldName, bucket.key) ? 'active' : '' }>
+      if (field && (field.type === 'keyword' || field.type === 'boolean') && this.props.buckets[fieldName]) {
+        const values = _.map(this.props.buckets[fieldName].buckets, bucket =>
+          <li key={ `${this.props.currentModel}-${bucket.key}` } onClick={ this.toggleFilter.bind(this, fieldName, bucket.key) } className={ this.isFacetFieldActive(fieldName, bucket.key) ? 'active' : '' }>
             <span className="facet-check"></span>
             <span className="facet-value">{ model.getValueLabel(field, bucket.key) }</span>
             <span className="facet-count">{ bucket.total }</span>
@@ -139,18 +90,18 @@ class Facets extends React.Component {
         )
 
         let missings = ''
-        if (this.state.buckets[fieldName].missings) {
+        if (this.props.buckets[fieldName].missings) {
           missings = (
             <li onClick={ this.toggleFilter.bind(this, fieldName, null) } className={ this.isFacetFieldActive(fieldName, null) ? 'active' : '' }>
               <span className="facet-check"></span>
               <span className="facet-value"><i>Missings</i></span>
-              <span className="facet-count">{ this.state.buckets[fieldName].missings }</span>
+              <span className="facet-count">{ this.props.buckets[fieldName].missings }</span>
             </li>
           )
         }
 
         facetsList.push(
-          <li key={ `${this.state.currentModel}-${fieldName}` } className="facet">
+          <li key={ `${this.props.currentModel}-${fieldName}` } className="facet">
             <span className="facet-name">{ fieldName }</span>
             <ul>
               { values }
@@ -160,7 +111,7 @@ class Facets extends React.Component {
         )
       } else if (field && field.type === 'date') {
         facetsList.push(
-          <li key={ `${this.state.currentModel}-${fieldName}` } className="facet">
+          <li key={ `${this.props.currentModel}-${fieldName}` } className="facet">
             <span className="facet-name">{ fieldName }</span>
             { 'Greater than: ' }
             <DateTimePicker onChange={ this.setDateFilter.bind(this, fieldName) } name={ 'gt' } value={ this.getDateFilter(field, 'gt') } />
@@ -177,12 +128,12 @@ class Facets extends React.Component {
         <nav className="facets">
           <header>
             <div className="selection-group">
-              <button type="button" className={ this.state.currentView === 'list' ? 'active' : '' } onClick={ this.updateCurrentView.bind(this, 'list') }>list</button>
-              <button type="button" className={ this.state.currentView === 'charts' ? 'active' : '' } onClick={ this.updateCurrentView.bind(this, 'charts') }>charts</button>
+              <button type="button" className={ this.props.currentView === 'list' ? 'active' : '' } onClick={ this.updateCurrentView.bind(this, 'list') }>list</button>
+              <button type="button" className={ this.props.currentView === 'charts' ? 'active' : '' } onClick={ this.updateCurrentView.bind(this, 'charts') }>charts</button>
             </div>
             <div className="total">
-              <em>{ this.state.total }</em> result{ this.state.total > 0 ? 's' : '' }
-              { this.state.loading ? ' (loading)' : '' }
+              <em>{ this.props.total }</em> result{ this.props.total > 0 ? 's' : '' }
+              { this.props.loading ? ' (loading)' : '' }
             </div>
           </header>
           <ul>{ facetsList }</ul>
@@ -191,5 +142,15 @@ class Facets extends React.Component {
     )
   }
 }
+
+Facets = connect((state) => ({
+  currentModel: state.project.currentModel,
+  model: state.project.models[state.project.currentModel],
+  currentView: state.project.currentView,
+  filters: state.filters,
+  loading: state.facets.loading,
+  total: state.facets.total,
+  buckets: state.facets.buckets
+}), { updateView, toggleFilter, setFilter, fetchAndLoad })(Facets)
 
 export default Facets

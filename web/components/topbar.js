@@ -1,47 +1,36 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import _ from 'lodash'
-import { updateModel } from '../actions'
+import { updateModel } from '../state/actions/project'
 
 class TopBar extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      store: this.props.store.getState()
-    }
-  }
-
-  componentDidMount() {
-    this.unsubscribeStore = this.props.store.subscribe(() => {
-      this.setState({ store: this.props.store.getState() })
-      let state = this.props.store.getState()
-    })
-  }
-
-  componentWillUnmount() {
-    this.unsubscribeStore()
-  }
-
   editCurrentModel(model, event) {
     event.preventDefault()
-    if (this.state.store.project.currentModel !== model) {
-      this.props.store.dispatch(updateModel(model))
+    if (this.props.currentModel !== model) {
+      this.props.updateModel(model)
     }
   }
 
   render() {
-    const listModels = _.map(this.state.store.project.models, (modelConfig, modelName) =>
-      <li key={ modelName } className={ this.state.store.project.currentModel === modelName ? 'active' : '' }>
+    const listModels = _.map(this.props.models, (modelConfig, modelName) =>
+      <li key={ modelName } className={ this.props.currentModel === modelName ? 'active' : '' }>
         <a href="#" onClick={ this.editCurrentModel.bind(this, modelName) }>{ modelName }</a>
       </li>
     )
 
     return (
       <header className="topbar">
-        <h1><a href="/">zoom-out <span>{ this.state.store.project.name }</span></a></h1>
+        <h1><a href="/">zoom-out <span>{ this.props.name }</span></a></h1>
         <ul>{ listModels }</ul>
       </header>
     )
   }
 }
+
+TopBar = connect((state) => ({
+  name: state.project.name,
+  models: state.project.models,
+  currentModel: state.project.currentModel
+}), { updateModel })(TopBar)
 
 export default TopBar
