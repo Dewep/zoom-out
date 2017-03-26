@@ -6,7 +6,7 @@ import createStore from './state/store'
 
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
-import { App } from './components'
+import App from './components/app'
 
 
 let store = createStore()

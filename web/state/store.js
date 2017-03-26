@@ -1,9 +1,11 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
+import logger from 'redux-logger'
 
 import projectReducers from './reducers/project'
 import filtersReducers from './reducers/filters'
 import facetsReducers from './reducers/facets'
+import listReducers from './reducers/list'
 
 import { updateModel, updateView } from './actions/project'
 import { updateFilters } from './actions/filters'
@@ -14,13 +16,15 @@ export default () => {
   const reducers = combineReducers({
     filters: filtersReducers,
     facets: facetsReducers,
-    project: projectReducers
+    project: projectReducers,
+    list: listReducers
   })
 
   const store = createStore(reducers, {
     filters: getInitialFilters()
   }, applyMiddleware(
-    thunkMiddleware
+    thunkMiddleware,
+    logger
   ))
 
   store.dispatch(updateModel(getInitialModel()))

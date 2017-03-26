@@ -26,6 +26,7 @@ export default (state = defaultState, action) => {
     case FACETS_SUCCESS:
       return { ...state, loading: false, total: action.total, buckets: action.buckets }
     case FACETS_FAILURE:
+      console.warn('FACETS_FAILURE', action.error)
       return { ...state, loading: false, error: action.error }
     default:
       return state

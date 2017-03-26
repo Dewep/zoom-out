@@ -44,6 +44,7 @@ export default (state = defaultState, action) => {
     case PROJECT_SUCCESS:
       return projectReducer(state, action)
     case PROJECT_FAILURE:
+      console.warn('PROJECT_FAILURE', action.error)
       return { ...state, loading: false, error: action.error }
     case UPDATE_VIEW:
       return { ...state, currentView: action.view }

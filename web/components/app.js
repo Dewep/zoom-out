@@ -7,7 +7,7 @@ import _ from 'lodash'
 import { fetchAndLoad } from '../state/actions/project'
 import TopBar from './topbar'
 import Facets from './facets'
-import ListView from './listview'
+import ListView from './listview/listview'
 import ChartsView from './chartsview'
 
 class App extends React.Component {
@@ -46,7 +46,7 @@ class App extends React.Component {
     if (this.props.currentView === 'charts') {
       view = (<ChartsView store={ this.props.store } />)
     } else {
-      view = (<ListView store={ this.props.store } />)
+      view = (<ListView />)
     }
 
     return (
