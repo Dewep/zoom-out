@@ -98,20 +98,21 @@ let modelPushRouter = () => {
     let data = []
 
     _.forEach(req.body, event => {
-      if (event.team !== 'demo' && event.team !== 'icl') {
-        return
+      if (event.application) {
+        if (!event.application.platform && event.application.is_mobile !== undefined) {
+          event.application.platform = event.application.is_mobile ? 'mobile' : 'web'
+          delete event.application.is_mobile
+        }
       }
 
-      console.log(event.attachement)
-      if (event.attachement) {
-        event.attachment = event.attachement
-        delete event.attachement
+      if (event.chan_id !== undefined) {
+        event.chan = event.chan_id
+        delete event.chan_id
       }
 
-      if (event.attachment && event.attachment.mime_type) {
-        event.with_styles = null
-      } else {
-        event.with_styles = !!event.with_styles
+      if (event.user_id !== undefined) {
+        event.user = event.user_id
+        delete event.user_id
       }
 
       data.push(event)

@@ -36,7 +36,7 @@ export default (state = defaultState, action) => {
     case SET_FILTER:
     case TOGGLE_FILTER:
     case UPDATE_MODEL:
-      return { ...state, loading: null }
+      return { ...defaultState }
     case LIST_REQUEST:
       return { ...state, loading: true, error: null, hasMore: false }
     case LIST_SUCCESS:

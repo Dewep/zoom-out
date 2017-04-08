@@ -6,6 +6,7 @@ import projectReducers from './reducers/project'
 import filtersReducers from './reducers/filters'
 import facetsReducers from './reducers/facets'
 import listReducers from './reducers/list'
+import chartsReducers from './reducers/charts'
 
 import { updateModel, updateView } from './actions/project'
 import { updateFilters } from './actions/filters'
@@ -17,7 +18,8 @@ export default () => {
     filters: filtersReducers,
     facets: facetsReducers,
     project: projectReducers,
-    list: listReducers
+    list: listReducers,
+    charts: chartsReducers
   })
 
   const store = createStore(reducers, {

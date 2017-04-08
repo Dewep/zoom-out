@@ -2,55 +2,67 @@ import React from 'react'
 import _ from 'lodash'
 import { model } from '../../../common'
 import { generateChart } from './highcharts'
-import { queryAggregations, getCategories } from './utils'
+import { getCategories } from './utils'
 
 class ColumnChart extends React.Component {
   renderChart(props) {
-    let storeState = props.store.getState()
-    let categories = getCategories(props.config.x.categories)
-    let filters = props.filters
+    if (!props.state) {
+      let categories = getCategories(props.config.x.categories)
+      let filters = props.filters
 
-    let aggregations = {
-      columns: {
-        terms: {
-          field: props.config.x.field
-        },
-        aggregations: {
-          value: {
-            [props.config.y.aggregation]: {
-              field: props.config.y.field
+      let aggregations = {
+        columns: {
+          terms: {
+            field: props.config.x.field
+          },
+          aggregations: {
+            value: {
+              [props.config.y.aggregation]: {
+                field: props.config.y.field
+              }
             }
           }
         }
       }
-    }
 
-    if (categories && categories.length) {
-      aggregations.columns.terms.size = categories.length
-      filters = { ...filters, [props.config.x.field]: categories }
-    }
+      if (categories && categories.length) {
+        aggregations.columns.terms.size = categories.length
+        filters = { ...filters, [props.config.x.field]: categories }
+      }
 
-    if (props.config.split) {
-      aggregations = {
-        split: {
-          terms: {
-            field: props.config.split.field
-          },
-          aggregations: aggregations
+      if (props.config.split) {
+        aggregations = {
+          split: {
+            terms: {
+              field: props.config.split.field
+            },
+            aggregations: aggregations
+          }
         }
       }
+
+      return props.onQuery(filters, aggregations)
     }
 
-    queryAggregations(storeState, filters, aggregations).then(response => {
+    if (props.state.loading === true && this.chart) {
+      this.chart.showLoading()
+    }
+
+    if (props.state.loading === false && this.chart) {
+      this.chart.hideLoading()
+    }
+
+    if (props.state.data) {
       let series = []
+      let categories = getCategories(props.config.x.categories)
 
       if (!categories || !categories.length) {
         categories = []
         if (props.config.split) {
           console.warn('[column-chart] You should not use a split without set explicit categories.')
-          categories = _.uniq(_.flatten(_.map(response.data.aggregations.split.buckets, b => _.map(b.columns.buckets, b2 => b2.key))))
+          categories = _.uniq(_.flatten(_.map(props.state.data.aggregations.split.buckets, b => _.map(b.columns.buckets, b2 => b2.key))))
         } else {
-          categories = _.map(response.data.aggregations.columns.buckets, b => b.key)
+          categories = _.map(props.state.data.aggregations.columns.buckets, b => b.key)
         }
       }
 
@@ -62,8 +74,8 @@ class ColumnChart extends React.Component {
       }
 
       if (props.config.split) {
-        let field = model.getField(storeState.project.models[storeState.project.currentModel].definition, props.config.split.field)
-        series = _.map(response.data.aggregations.split.buckets, b => {
+        let field = model.getField(props.model.definition, props.config.split.field)
+        series = _.map(props.state.data.aggregations.split.buckets, b => {
           return {
             name: model.getValueLabel(field, b.key),
             data: computeSerie(b.columns.buckets)
@@ -72,12 +84,14 @@ class ColumnChart extends React.Component {
       } else {
         series.push({
           name: 'data',
-          data: computeSerie(response.data.aggregations.columns.buckets)
+          data: computeSerie(props.state.data.aggregations.columns.buckets)
         })
       }
-      if (this.chart) {
+
+      if (this.chart && this.chart.destroy) {
         this.chart.destroy()
       }
+
       let options = {
         tooltip: {
           shared: true,
@@ -101,7 +115,7 @@ class ColumnChart extends React.Component {
         }
       }
       this.chart = generateChart(this.chartRef, 'column', series, props.config.title || `${props.config.y.field} by ${props.config.x.field}`, options)
-    }).catch(console.error)
+    }
   }
 
   shouldComponentUpdate(nextProps) {

@@ -3,36 +3,48 @@ import React from 'react'
 import _ from 'lodash'
 import moment from 'moment'
 import { generateChart } from './highcharts'
-import { queryAggregations, buildDateRanges } from './utils'
+import { buildDateRanges } from './utils'
 
 class AreaChart extends React.Component {
   renderChart(props) {
-    let storeState = props.store.getState()
-    let aggregations = {
-      lines: {
-        terms: {
-          field: props.config.split.field
-        },
-        aggregations: {
-          ranges: {
-            date_range: {
-              field: props.config.x.field,
-              ranges: buildDateRanges(props.config.x.period, props.config.x.tick)
-            },
-            aggregations: {
-              value: {
-                [props.config.y.aggregation]: {
-                  field: props.config.y.field
+    if (!props.state) {
+      let aggregations = {
+        lines: {
+          terms: {
+            field: props.config.split.field
+          },
+          aggregations: {
+            ranges: {
+              date_range: {
+                field: props.config.x.field,
+                ranges: buildDateRanges(props.config.x.period, props.config.x.tick)
+              },
+              aggregations: {
+                value: {
+                  [props.config.y.aggregation]: {
+                    field: props.config.y.field
+                  }
                 }
               }
             }
           }
         }
       }
+
+      return props.onQuery(props.filters, aggregations)
     }
-    queryAggregations(storeState, props.filters, aggregations).then(response => {
+
+    if (props.state.loading === true && this.chart) {
+      this.chart.showLoading()
+    }
+
+    if (props.state.loading === false && this.chart) {
+      this.chart.hideLoading()
+    }
+
+    if (props.state.data) {
       let xAxis = []
-      let series = _.map(response.data.aggregations.lines.buckets, bucket => {
+      let series = _.map(props.state.data.aggregations.lines.buckets, bucket => {
         return {
           name: bucket.key,
           data: _.map(bucket.ranges.buckets, (point, index) => {
@@ -43,9 +55,11 @@ class AreaChart extends React.Component {
           })
         }
       })
-      if (this.chart) {
+
+      if (this.chart && this.chart.destroy) {
         this.chart.destroy()
       }
+
       let options = {
         tooltip: {
           shared: true,
@@ -75,7 +89,7 @@ class AreaChart extends React.Component {
         }
       }
       this.chart = generateChart(this.chartRef, 'area', series, props.config.title || `${props.config.y.field} by ${props.config.x.field}`, options)
-    }).catch(console.error)
+    }
   }
 
   shouldComponentUpdate(nextProps) {
@@ -88,7 +102,7 @@ class AreaChart extends React.Component {
   }
 
   componentWillUnmount() {
-    if (this.chart) {
+    if (this.chart && this.chart.destroy) {
       this.chart.destroy()
     }
   }

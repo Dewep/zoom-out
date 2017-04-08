@@ -7,7 +7,7 @@ class ListView extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      selected: -1
+      selected: 0
     }
   }
 
@@ -65,7 +65,7 @@ class ListView extends React.Component {
     let selected = ''
 
     let itemsList = _.map(this.props.results, (item, index) =>
-      <li key={ item._id } className={ index === this.state.selected ? 'active' : '' } onClick={ this.select.bind(this, index) }>
+      <li key={ `${this.props.currentModel}-${item._id}` } className={ index === this.state.selected ? 'active' : '' } onClick={ this.select.bind(this, index) }>
         <span className="meta">{ templateMeta(item) }</span>
         <span className="title">{ templateTitle(item) }</span>
         <span className="description">{ templateDescription(item) }</span>

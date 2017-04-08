@@ -1,33 +1,46 @@
 import React from 'react'
 import _ from 'lodash'
 import { generateChart } from './highcharts'
-import { queryAggregations } from './utils'
 
 class PieChart extends React.Component {
   renderChart(props) {
-    let storeState = props.store.getState()
-    let aggregations = {
-      values: {
-        terms: {
-          field: props.config.field
+    if (!props.state) {
+      let aggregations = {
+        values: {
+          terms: {
+            field: props.config.field
+          }
         }
       }
+
+      return props.onQuery(props.filters, aggregations, props.config.field)
     }
-    queryAggregations(storeState, props.filters, aggregations, props.config.field).then(response => {
+
+    if (props.state.loading === true && this.chart) {
+      this.chart.showLoading()
+    }
+
+    if (props.state.loading === false && this.chart) {
+      this.chart.hideLoading()
+    }
+
+    if (props.state.data) {
       let series = [{
         name: props.config.field,
-        data: _.map(response.data.aggregations.values.buckets, bucket => {
+        data: _.map(props.state.data.aggregations.values.buckets, bucket => {
           return {
             name: bucket.key,
             y: bucket.doc_count
           }
         })
       }]
-      if (this.chart) {
+
+      if (this.chart && this.chart.destroy) {
         this.chart.destroy()
       }
+
       this.chart = generateChart(this.chartRef, 'pie', series, props.config.title || `${props.config.field} distribution`)
-    }).catch(console.error)
+    }
   }
 
   shouldComponentUpdate(nextProps) {

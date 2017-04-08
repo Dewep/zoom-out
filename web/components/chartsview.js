@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import { query } from '../../state/actions/charts'
+import { query } from '../state/actions/charts'
 import StatChart from './charts/stat'
 import ColumnChart from './charts/column'
 import PieChart from './charts/pie'
@@ -10,7 +10,7 @@ import AreaChart from './charts/area'
 
 class ChartsView extends React.Component {
   query(chartId, filters, aggregations, filterExclude) {
-    // todo
+    this.props.query(chartId, this.props.currentModel, filters, aggregations, filterExclude)
   }
 
   render() {
@@ -31,7 +31,7 @@ class ChartsView extends React.Component {
       }
 
       let ChartComponent = charts[chart.type] || null
-      let chardId = `${this.props.currentModel}-${index}`
+      let chartId = `${this.props.currentModel}-${index}`
 
       let filters = {...this.props.filters}
       if (chart.filters) {
@@ -42,12 +42,12 @@ class ChartsView extends React.Component {
 
       if (ChartComponent) {
         return (
-          <ChartComponent key={chardId} filters={filters} model={this.props.model} data={this.props.charts[chardId]} onQuery={this.query.bind(this, chardId)} config={chart} style={style} />
+          <ChartComponent key={chartId} filters={filters} model={this.props.model} chartId={chartId} state={this.props.charts[chartId]} onQuery={this.query.bind(this, chartId)} config={chart} style={style} />
         )
       } else {
         style.textAlign = 'center'
         return (
-          <p key={ chardId } style={ style }>Chart not found!</p>
+          <p key={ chartId } style={ style }>Chart not found!</p>
         )
       }
     })

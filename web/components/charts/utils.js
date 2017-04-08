@@ -24,18 +24,6 @@ export function buildDateRanges(period, tick) {
   return ranges
 }
 
-export function queryAggregations(storeState, filters, aggregations, filterExclude) {
-  return axios.post(storeState.project.hostname + '/api/models/' + storeState.project.currentModel + '/query/aggregations/', {
-    filters: filters,
-    filterExclude: filterExclude,
-    aggregations: aggregations
-  }, {
-    headers: {
-      Authorization: storeState.project.apiKey
-    }
-  })
-}
-
 export function getCategories(type) {
   if (type === 'hours') {
     return _.map(_.range(24), item => item.toString())
