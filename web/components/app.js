@@ -53,7 +53,7 @@ class App extends React.Component {
       <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
         <div className="app-container">
           <TopBar store={ this.props.store } />
-          <section className="page-container">
+          <section className={ 'page-container sidebar-' + (this.props.sidebar ? 'opened' : 'closed') }>
             <Facets store={ this.props.store } />
             { view }
           </section>
@@ -67,7 +67,8 @@ App = connect((state) => ({
   loading: state.project.loading,
   name: state.project.name,
   currentModel: state.project.currentModel,
-  currentView: state.project.currentView
+  currentView: state.project.currentView,
+  sidebar: state.project.sidebar
 }), { fetchAndLoad })(App)
 
 export default App

@@ -15,9 +15,9 @@ class ChartsView extends React.Component {
 
   render() {
     let chartsList = _.map(this.props.model.charts, (chart, index) => {
-      let width = (chart.width || 1.0) * 100
+      let width = (chart.width || 1.0) * 100 * (window.innerWidth < 700 ? 2 : 1)
       let style = {
-        width: `calc(${width}% - 20px)`
+        width: `calc(${Math.min(width, 100)}% - 20px)`
       }
       if (chart.height) {
         style.height = `${chart.height}px`

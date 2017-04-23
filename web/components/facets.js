@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import { updateView } from '../state/actions/project'
+import { updateModel, updateView } from '../state/actions/project'
 import { toggleFilter, setFilter } from '../state/actions/filters'
 import { fetchAndLoad } from '../state/actions/facets'
 import { model } from '../../common'
@@ -74,6 +74,13 @@ class Facets extends React.Component {
     }
   }
 
+  editCurrentModel(model, event) {
+    event.preventDefault()
+    if (this.props.currentModel !== model) {
+      this.props.updateModel(model)
+    }
+  }
+
   render() {
     let facetsList = []
 
@@ -123,9 +130,18 @@ class Facets extends React.Component {
       }
     })
 
+    const listModels = _.map(this.props.models, (modelConfig, modelName) =>
+      <li key={ modelName } className={ this.props.currentModel === modelName ? 'active' : '' }>
+        <a href="#" onClick={ this.editCurrentModel.bind(this, modelName) }>{ modelName }</a>
+      </li>
+    )
+
     return (
       <section className="sidebar">
         <nav className="facets">
+          <header>
+            <ul>{ listModels }</ul>
+          </header>
           <header>
             <div className="selection-group">
               <button type="button" className={ this.props.currentView === 'list' ? 'active' : '' } onClick={ this.updateCurrentView.bind(this, 'list') }>list</button>
@@ -145,12 +161,13 @@ class Facets extends React.Component {
 
 Facets = connect((state) => ({
   currentModel: state.project.currentModel,
+  models: state.project.models,
   model: state.project.models[state.project.currentModel],
   currentView: state.project.currentView,
   filters: state.filters,
   loading: state.facets.loading,
   total: state.facets.total,
   buckets: state.facets.buckets
-}), { updateView, toggleFilter, setFilter, fetchAndLoad })(Facets)
+}), { updateModel, updateView, toggleFilter, setFilter, fetchAndLoad })(Facets)
 
 export default Facets

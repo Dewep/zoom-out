@@ -17,11 +17,28 @@ section.page-container {
         text-align: center;
         display: flex;
 
-        & > div {
+        & > div, & > ul {
           flex: 1;
 
           &.total {
             line-height: 24px;
+          }
+
+          & > li {
+            text-transform: uppercase;
+            padding: 2px;
+
+            &.active a {
+              text-decoration: underline;
+            }
+          }
+        }
+
+        & > ul {
+          display: none;
+
+          @media screen and (max-width: 1000px) {
+            display: initial;
           }
         }
       }
@@ -49,6 +66,10 @@ section.page-container {
             cursor: pointer;
             color: $color-second-text;
             padding: 2px 4px;
+
+            &:nth-child(even) {
+              background: lighten($color-navbar-bg, 1%);
+            }
 
             .facet-check {
               flex: 0 0 auto;

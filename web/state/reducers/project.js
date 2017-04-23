@@ -3,6 +3,7 @@ export const PROJECT_SUCCESS = 'PROJECT_SUCCESS'
 export const PROJECT_FAILURE = 'PROJECT_FAILURE'
 export const UPDATE_VIEW = 'UPDATE_VIEW'
 export const UPDATE_MODEL = 'UPDATE_MODEL'
+export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR'
 
 
 const defaultState = {
@@ -11,7 +12,8 @@ const defaultState = {
   name: null,
   models: {},
   currentModel: null,
-  currentView: 'list'
+  currentView: 'list',
+  sidebar: false
 }
 
 
@@ -39,6 +41,8 @@ const projectReducer = (state, action) => {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
+    case TOGGLE_SIDEBAR:
+      return { ...state, sidebar: !state.sidebar }
     case PROJECT_REQUEST:
       return { ...state, loading: true, error: null }
     case PROJECT_SUCCESS:

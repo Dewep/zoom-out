@@ -3,7 +3,8 @@ import {
   PROJECT_SUCCESS,
   PROJECT_FAILURE,
   UPDATE_VIEW,
-  UPDATE_MODEL
+  UPDATE_MODEL,
+  TOGGLE_SIDEBAR
 } from '../reducers/project'
 
 import projectApi from '../../api/project'
@@ -34,6 +35,10 @@ const updateModel = (model) => ({
   model
 })
 
+const toggleSidebar = () => ({
+  type: TOGGLE_SIDEBAR
+})
+
 
 const fetchAndLoad = () => (dispatch) => {
   dispatch(projectRequest())
@@ -46,11 +51,13 @@ const fetchAndLoad = () => (dispatch) => {
 export {
   fetchAndLoad,
   updateView,
-  updateModel
+  updateModel,
+  toggleSidebar
 }
 
 export default {
   fetchAndLoad,
   updateView,
-  updateModel
+  updateModel,
+  toggleSidebar
 }

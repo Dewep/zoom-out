@@ -85,6 +85,7 @@ class ListView extends React.Component {
     if (this.state.selected >= 0 && this.state.selected < this.props.results.length) {
       selected = (
         <article className="active">
+          <a className="cancel-selection" href="#" onClick={ this.select.bind(this, -1) }>&laquo; Back to the results list</a>
           <h2>{ templateTitle(this.props.results[this.state.selected]) }</h2>
           <table>
             <tbody>{ this.getTableLines(this.props.results[this.state.selected]) }</tbody>
@@ -94,7 +95,7 @@ class ListView extends React.Component {
     }
 
     return (
-      <section className="general-view list-view">
+      <section className={ 'general-view list-view' + (selected ? ' selection' : '') }>
         <ul>{ itemsList }</ul>
         { selected }
       </section>
