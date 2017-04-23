@@ -1,6 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { generateChart } from './highcharts'
+import { model } from '../../../common'
 
 class PieChart extends React.Component {
   renderChart(props) {
@@ -29,7 +30,7 @@ class PieChart extends React.Component {
         name: props.config.field,
         data: _.map(props.state.data.aggregations.values.buckets, bucket => {
           return {
-            name: bucket.key,
+            name: model.getFieldValueLabel(this.props.model.definition, props.config.field, bucket.key),
             y: bucket.doc_count
           }
         })
