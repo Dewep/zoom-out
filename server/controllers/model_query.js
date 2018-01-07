@@ -24,7 +24,8 @@ let modelQueryRouter = () => {
             },
             values: {
               terms: {
-                field: facet
+                field: facet,
+                size: 25
               }
             }
           }

@@ -6,6 +6,7 @@ import { toggleFilter, setFilter } from '../state/actions/filters'
 import { fetchAndLoad } from '../state/actions/facets'
 import { model } from '../../common'
 import DateTimePicker from './datetimepicker'
+import { formatNumber } from './charts/utils'
 
 class Facets extends React.Component {
   componentDidMount() {
@@ -148,7 +149,7 @@ class Facets extends React.Component {
               <button type="button" className={ this.props.currentView === 'charts' ? 'active' : '' } onClick={ this.updateCurrentView.bind(this, 'charts') }>charts</button>
             </div>
             <div className="total">
-              <em>{ this.props.total }</em> result{ this.props.total > 0 ? 's' : '' }
+              <em>{ formatNumber(this.props.total) }</em> result{ this.props.total > 0 ? 's' : '' }
               { this.props.loading ? ' (loading)' : '' }
             </div>
           </header>

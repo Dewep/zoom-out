@@ -7,6 +7,7 @@ import ColumnChart from './charts/column'
 import PieChart from './charts/pie'
 import LineChart from './charts/line'
 import AreaChart from './charts/area'
+import TableChart from './charts/table'
 
 class ChartsView extends React.Component {
   query(chartId, filters, aggregations, filterExclude) {
@@ -27,7 +28,8 @@ class ChartsView extends React.Component {
         column: ColumnChart,
         pie: PieChart,
         line: LineChart,
-        area: AreaChart
+        area: AreaChart,
+        table: TableChart
       }
 
       let ChartComponent = charts[chart.type] || null

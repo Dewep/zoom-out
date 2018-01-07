@@ -23,5 +23,29 @@ section.charts-view {
         font-weight: bold;
       }
     }
+
+    &.table-stat {
+      overflow-y: auto;
+      h3 {
+        text-align: center;
+        font-size: 1.6rem;
+        font-weight: normal;
+      }
+      table {
+        .stat-cell {
+          text-align: right;
+          &.warning {
+            color: #ff2500;
+            font-weight: bold;
+          }
+        }
+        tr {
+          border-bottom: 1px solid #f1f1f1;
+          &:hover {
+            background: #f1f1f1;
+          }
+        }
+      }
+    }
   }
 }

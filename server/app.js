@@ -13,6 +13,44 @@ app.use((req, res, next) => {
   next()
 })
 
+// const https = require('https')
+// app.all('/api/*', (req, res) => {
+//   let body = undefined
+//   const options = {
+//     host: 'zoom-out.pandalab.fr',
+//     path: req.url,
+//     method: req.method,
+//     headers: {
+//       'Cache-Control': 'no-cache',
+//       Authorization: 'API_KEY'
+//     },
+//     rejectUnauthorized: false
+//   }
+//   if (req.method === 'POST') {
+//     body = JSON.stringify(req.body)
+//     options.headers['Content-Type'] = 'application/json'
+//     options.headers['Content-Length'] = body.length
+//   }
+//   const creq = https.request(options, function (cres) {
+//     res.writeHead(cres.statusCode)
+//     cres.setEncoding('utf8')
+//     cres.on('data', function (chunk) {
+//       res.write(chunk)
+//     })
+//     cres.on('close', function () {
+//       res.end()
+//     })
+//     cres.on('end', function () {
+//       res.end()
+//     })
+//   }).on('error', function (e) {
+//     console.error(e.message)
+//     res.writeHead(500)
+//     res.end()
+//   })
+//   creq.end(body)
+// })
+
 app.use('/api/auth', controllers.auth.router())
 
 app.use('/api', controllers.auth.authorizationCheck)
