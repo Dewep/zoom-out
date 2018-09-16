@@ -1,8 +1,9 @@
 import React from 'react'
 import _ from 'lodash'
 import { formatNumber } from './utils'
+import BaseChart from './base-chart'
 
-class TableChart extends React.Component {
+class TableChart extends BaseChart {
   constructor(props) {
     super(props)
 
@@ -38,6 +39,10 @@ class TableChart extends React.Component {
 
   componentDidUpdate() {
     this.query()
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return this.isJsonPropsDiffer(nextProps)
   }
 
   formatNumber (value, decimal) {
@@ -79,6 +84,8 @@ class TableChart extends React.Component {
   }
 
   render() {
+    this.setJsonProps(this.props)
+
     let rows = []
     let style = {}
 

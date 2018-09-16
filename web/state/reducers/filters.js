@@ -1,4 +1,6 @@
-import { UPDATE_MODEL } from './project'
+import moment from 'moment'
+
+import { UPDATE_MODEL, PROJECT_SUCCESS } from './project'
 
 export const UPDATE_FILTERS = 'UPDATE_FILTERS'
 export const SET_FILTER = 'SET_FILTER'
@@ -51,12 +53,24 @@ const toggleFilter = (state, action) => {
   return { ...state, [action.field]: [...state[action.field], action.value] }
 }
 
+const updateModel = (state, action) => {
+  if (action.filters) {
+    return action.filters
+  }
+  if (action.dateFilterField) {
+    return {
+      [action.dateFilterField]: [moment().startOf('day').subtract({ months: 1, days: 15 }).format(), null]
+    }
+  }
+  return {}
+}
 
-export default (state = defaultState, action) => {
+
+export default (state = defaultState, action, rootState) => {
   switch (action.type) {
     case UPDATE_FILTERS:
     case UPDATE_MODEL:
-      return action.filters || {}
+      return updateModel(state, action)
     case SET_FILTER:
       return setFilter(state, action)
     case TOGGLE_FILTER:

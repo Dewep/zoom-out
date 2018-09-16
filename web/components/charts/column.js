@@ -3,9 +3,12 @@ import _ from 'lodash'
 import { model } from '../../../common'
 import { generateChart } from './highcharts'
 import { getCategories } from './utils'
+import BaseChart from './base-chart'
 
-class ColumnChart extends React.Component {
+class ColumnChart extends BaseChart {
   renderChart(props) {
+    this.setJsonProps(props)
+
     if (!props.state) {
       let categories = getCategories(props.config.x.categories)
       let filters = props.filters
@@ -119,7 +122,9 @@ class ColumnChart extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    this.renderChart(nextProps)
+    if (this.isJsonPropsDiffer(nextProps)) {
+      this.renderChart(nextProps)
+    }
     return false
   }
 

@@ -1,4 +1,4 @@
-@import 'theme-github';
+@import 'theme-panda';
 
 html, body, #app {
   margin: 0;
@@ -110,6 +110,7 @@ header.topbar {
       }
       &.active a {
         color: $color-important;
+        font-weight: 500;
       }
     }
 

@@ -1,8 +1,9 @@
 import React from 'react'
 import _ from 'lodash'
 import { formatNumber, formatSize } from './utils'
+import BaseChart from './base-chart'
 
-class StatChart extends React.Component {
+class StatChart extends BaseChart {
   constructor(props) {
     super(props)
 
@@ -33,7 +34,13 @@ class StatChart extends React.Component {
     this.query()
   }
 
+  shouldComponentUpdate(nextProps) {
+    return this.isJsonPropsDiffer(nextProps)
+  }
+
   render() {
+    this.setJsonProps(this.props)
+
     let value = '-'
     let style = {}
 

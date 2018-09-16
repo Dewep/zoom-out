@@ -18,23 +18,11 @@ const defaultState = {
 
 
 const projectReducer = (state, action) => {
-  let currentModel = state.currentModel
-
-  if (!currentModel || !action.models[currentModel]) {
-    currentModel = null
-
-    _.some(action.models, (modelConfig, modelName) => {
-      currentModel = modelName
-      return true
-    })
-  }
-
   return {
     ...state,
     loading: false,
     name: action.name,
-    models: action.models,
-    currentModel: currentModel
+    models: action.models
   }
 }
 

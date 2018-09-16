@@ -2,9 +2,12 @@ import React from 'react'
 import _ from 'lodash'
 import { generateChart } from './highcharts'
 import { model } from '../../../common'
+import BaseChart from './base-chart'
 
-class PieChart extends React.Component {
+class PieChart extends BaseChart {
   renderChart(props) {
+    this.setJsonProps(props)
+
     if (!props.state) {
       let aggregations = {
         values: {
@@ -45,7 +48,9 @@ class PieChart extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    this.renderChart(nextProps)
+    if (this.isJsonPropsDiffer(nextProps)) {
+      this.renderChart(nextProps)
+    }
     return false
   }
 

@@ -3,21 +3,24 @@ import React from 'react'
 import _ from 'lodash'
 import moment from 'moment'
 import { generateChart } from './highcharts'
-import { buildDateRanges } from './utils'
+import BaseChart from './base-chart'
 
-class LineChart extends React.Component {
+class LineChart extends BaseChart {
   renderChart(props) {
+    this.setJsonProps(props)
+
     if (!props.state) {
       let aggregations = {
         lines: {
           terms: {
-            field: props.config.split.field
+            field: props.config.split.field,
+            size: 50
           },
           aggregations: {
             ranges: {
               date_range: {
                 field: props.config.x.field,
-                ranges: buildDateRanges(props.config.x.period, props.config.x.tick)
+                ranges: this.buildDateRanges(props.config.x)
               },
               aggregations: {
                 value: {
@@ -100,7 +103,9 @@ class LineChart extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    this.renderChart(nextProps)
+    if (this.isJsonPropsDiffer(nextProps)) {
+      this.renderChart(nextProps)
+    }
     return false
   }
 

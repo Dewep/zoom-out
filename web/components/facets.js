@@ -9,6 +9,13 @@ import DateTimePicker from './datetimepicker'
 import { formatNumber } from './charts/utils'
 
 class Facets extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      displayAll: {}
+    }
+  }
+
   componentDidMount() {
     if (this.props.loading === null) {
       this.props.fetchAndLoad(this.props.currentModel, this.props.filters)
@@ -59,10 +66,10 @@ class Facets extends React.Component {
 
   getDateFilter(field, name) {
     if (this.props.filters[field]) {
-      if (name === 'gt' && this.props.filters[field].length > 0) {
+      if (name === 'gt' && this.props.filters[field].length > 0 && this.props.filters[field][0]) {
         return new Date(this.props.filters[field][0])
       }
-      if (name === 'lt' && this.props.filters[field].length > 1) {
+      if (name === 'lt' && this.props.filters[field].length > 1 && this.props.filters[field][1]) {
         return new Date(this.props.filters[field][1])
       }
     }
@@ -82,6 +89,12 @@ class Facets extends React.Component {
     }
   }
 
+  showAll (fieldName) {
+    this.setState({
+      displayAll: { ...this.state.displayAll, [fieldName]: true }
+    })
+  }
+
   render() {
     let facetsList = []
 
@@ -89,7 +102,10 @@ class Facets extends React.Component {
       let field = model.getField(this.props.model.definition, fieldName)
 
       if (field && (field.type === 'keyword' || field.type === 'boolean') && this.props.buckets[fieldName]) {
-        const values = _.map(this.props.buckets[fieldName].buckets, bucket =>
+        const buckets = this.props.buckets[fieldName].buckets
+        const bucketsDisplayed = this.state.displayAll[fieldName] ? buckets : buckets.slice(0, 15)
+
+        const values = _.map(bucketsDisplayed, bucket =>
           <li key={ `${this.props.currentModel}-${bucket.key}` } onClick={ this.toggleFilter.bind(this, fieldName, bucket.key) } className={ this.isFacetFieldActive(fieldName, bucket.key) ? 'active' : '' }>
             <span className="facet-check"></span>
             <span className="facet-value">{ model.getValueLabel(field, bucket.key) }</span>
@@ -98,7 +114,13 @@ class Facets extends React.Component {
         )
 
         let missings = ''
-        if (this.props.buckets[fieldName].missings) {
+        if (bucketsDisplayed.length !== buckets.length) {
+          missings = (
+            <li onClick={ this.showAll.bind(this, fieldName) }>
+              <span className="facet-value"><center><i>Display all values ({ buckets.length })</i></center></span>
+            </li>
+          )
+        } else if (this.props.buckets[fieldName].missings) {
           missings = (
             <li onClick={ this.toggleFilter.bind(this, fieldName, null) } className={ this.isFacetFieldActive(fieldName, null) ? 'active' : '' }>
               <span className="facet-check"></span>
@@ -122,10 +144,10 @@ class Facets extends React.Component {
           <li key={ `${this.props.currentModel}-${fieldName}` } className="facet">
             <span className="facet-name">{ fieldName }</span>
             { 'Greater than: ' }
-            <DateTimePicker onChange={ this.setDateFilter.bind(this, fieldName) } name={ 'gt' } value={ this.getDateFilter(field, 'gt') } />
+            <DateTimePicker onChange={ this.setDateFilter.bind(this, fieldName) } name={ 'gt' } value={ this.getDateFilter(fieldName, 'gt') } />
             <br />
             { 'Less than: ' }
-            <DateTimePicker onChange={ this.setDateFilter.bind(this, fieldName) } name={ 'lt' } value={ this.getDateFilter(field, 'lt') } />
+            <DateTimePicker onChange={ this.setDateFilter.bind(this, fieldName) } name={ 'lt' } value={ this.getDateFilter(fieldName, 'lt') } />
           </li>
         )
       }

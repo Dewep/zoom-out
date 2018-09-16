@@ -6,7 +6,7 @@ import {
   UPDATE_MODEL,
   TOGGLE_SIDEBAR
 } from '../reducers/project'
-
+import { model } from '../../../common'
 import projectApi from '../../api/project'
 
 
@@ -30,20 +30,59 @@ const updateView = (view) => ({
   view
 })
 
-const updateModel = (model) => ({
-  type: UPDATE_MODEL,
-  model
-})
+const updateModel = (newModel) => (dispatch, getState) => {
+  let dateFilterField = null
+  const state = getState()
+  if (state && state.project && state.project.models && state.project.models[newModel]) {
+    const definition = state.project.models[newModel].definition || {}
+    const facets = state.project.models[newModel].facets || []
+    dateFilterField = facets.find(fieldName => {
+      const field = model.getField(definition, fieldName)
+      if (field && field.type === 'date') {
+        return fieldName
+      }
+      return null
+    })
+  }
+  return dispatch({
+    type: UPDATE_MODEL,
+    model: newModel,
+    dateFilterField
+  })
+}
 
 const toggleSidebar = () => ({
   type: TOGGLE_SIDEBAR
 })
 
 
-const fetchAndLoad = () => (dispatch) => {
+const fetchAndLoad = () => (dispatch, getState) => {
   dispatch(projectRequest())
   return projectApi.fetch()
-    .then((response) => dispatch(projectSuccess(response.data.project, response.data.models)))
+    .then((response) => {
+      let currentModel = null
+      try {
+        currentModel = getState().project.currentModel || null
+      } catch (e) {}
+      let newModel = currentModel
+
+      if (!currentModel || !response.data.models[currentModel]) {
+        newModel = null
+
+        _.some(response.data.models, (modelConfig, modelName) => {
+          newModel = modelName
+          return true
+        })
+      }
+
+      const actions = []
+      actions.push(dispatch(projectSuccess(response.data.project, response.data.models)))
+      if (newModel !== currentModel) {
+        actions.push(dispatch(updateModel(newModel)))
+      }
+
+      return Promise.all(actions)
+    })
     .catch((error) => dispatch(projectFailure(error)))
 }
 
