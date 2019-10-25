@@ -59,13 +59,15 @@ section.page-container {
             text-transform: uppercase;
             display: block;
             margin: 20px 0 8px;
+            font-weight: 500;
           }
 
           ul > li {
             display: flex;
             cursor: pointer;
             color: $color-second-text;
-            padding: 2px 4px;
+            padding: 0px 4px;
+            font-size: 90%;
 
             &:nth-child(even) {
               background: lighten($color-navbar-bg, 1%);
@@ -96,6 +98,7 @@ section.page-container {
                 transition: all .2s;
                 opacity: 0;
                 transform: scale(0);
+                font-family: monospace;
               }
             }
 

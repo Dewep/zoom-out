@@ -45,7 +45,7 @@ header.topbar {
     max-width: 350px;
     min-width: 240px;
     margin: 0;
-    padding: 0;
+    padding: 0 10px;
     font-size: 16px;
     display: flex;
 
@@ -100,16 +100,18 @@ header.topbar {
     margin: 0;
     padding: 0;
     list-style: none;
+    text-align: left;
 
     li {
       display: inline-block;
-      margin: 0 15px;
 
       a {
         color: $color-navbar;
+        display: block;
+        padding: 0 20px;
       }
       &.active a {
-        color: $color-important;
+        background: $color-important;
         font-weight: 500;
       }
     }
