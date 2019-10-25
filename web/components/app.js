@@ -1,8 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
+import MomentUtils from '@date-io/moment'
 import _ from 'lodash'
 import { fetchAndLoad } from '../state/actions/project'
 import TopBar from './topbar'
@@ -50,7 +49,7 @@ class App extends React.Component {
     }
 
     return (
-      <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
         <div className="app-container">
           <TopBar store={ this.props.store } />
           <section className={ 'page-container sidebar-' + (this.props.sidebar ? 'opened' : 'closed') }>
@@ -58,7 +57,7 @@ class App extends React.Component {
             { view }
           </section>
         </div>
-      </MuiThemeProvider>
+      </MuiPickersUtilsProvider>
     )
   }
 }

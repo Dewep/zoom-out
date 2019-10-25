@@ -43,10 +43,10 @@ button {
   border: 1px solid $color-button-border;
   border-radius: 4px;
 
-  &.active, &:hover {
-    color: $color-button-active;
-    background: $color-button-active-gb;
-  }
+  // &.active, &:hover {
+  //   color: $color-button-active;
+  //   background: $color-button-active-gb;
+  // }
 }
 
 table {

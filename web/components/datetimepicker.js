@@ -1,12 +1,22 @@
 import React from 'react'
-import DatePicker from 'material-ui/DatePicker'
-import TimePicker from 'material-ui/TimePicker'
+import { DatePicker, TimePicker } from '@material-ui/pickers'
+import indigoColors from '@material-ui/core/colors/indigo'
+import { createMuiTheme } from '@material-ui/core'
+import { ThemeProvider } from '@material-ui/styles'
 import moment from 'moment'
+
+const defaultMaterialTheme = createMuiTheme({
+  palette: {
+    primary: indigoColors,
+  },
+})
 
 class DateTimePicker extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      isDateOpen: false,
+      isTimeOpen: false,
       date: this.props.value || null,
       time: this.props.value || null
     }
@@ -16,23 +26,6 @@ class DateTimePicker extends React.Component {
   }
 
   componentWillUnmount() {
-  }
-
-  saveRef(type, ref) {
-    if (type === 'date') {
-      this.dateRef = ref
-    } else if (type === 'time') {
-      this.timeRef = ref
-    }
-  }
-
-  openPicker(type, event) {
-    event && event.preventDefault()
-    if (type === 'date' && this.dateRef) {
-      this.dateRef.openDialog()
-    } else if (type === 'time' && this.state.date && this.timeRef) {
-      this.timeRef.openDialog()
-    }
   }
 
   notifyChange() {
@@ -48,21 +41,35 @@ class DateTimePicker extends React.Component {
     }
   }
 
+  setIsOpen (type, isOpen) {
+    if (type === 'date') {
+      this.setState({ isDateOpen: isOpen })
+    } else if (type === 'time') {
+      this.setState({ isTimeOpen: isOpen })
+    }
+  }
+
   reset() {
     this.setState({
+      isDateOpen: false,
+      isTimeOpen: false,
       date: null,
       time: null
     }, this.notifyChange.bind(this))
   }
 
-  onChange(type, event, date) {
+  onChange(type, date) {
     if (type === 'date') {
       this.setState({
+        isDateOpen: false,
+        isTimeOpen: false,
         date: date,
         time: moment().startOf('day').toDate()
       }, this.notifyChange.bind(this))
     } else if (type === 'time' && this.state.date) {
       this.setState({
+        isDateOpen: false,
+        isTimeOpen: false,
         time: date
       }, this.notifyChange.bind(this))
     }
@@ -84,28 +91,36 @@ class DateTimePicker extends React.Component {
 
     return (
       <span className="date-time-picker">
-        <a href="#" onClick={ this.openPicker.bind(this, 'date') }>
+        <a href="#" onClick={ this.setIsOpen.bind(this, 'date', true) }>
           { date }
+        </a>
+        { ' ' }
+        <a href="#" onClick={ this.setIsOpen.bind(this, 'time', true) }>
+          { time }
+        </a>
+        <ThemeProvider theme={defaultMaterialTheme}>
           <DatePicker
-            ref={ this.saveRef.bind(this, 'date') }
+            open={ this.state.isDateOpen }
+            onOpen={ this.setIsOpen.bind(this, 'date', true) }
+            onClose={ this.setIsOpen.bind(this, 'date', false) }
             name={ `date-picker-${this.props.name}` }
+            disableFuture={ false }
             value={ this.state.date }
             onChange={ this.onChange.bind(this, 'date') }
             cancelLabel="Remove"
             onDismiss={ this.reset.bind(this) }
             style={ hiddenStyle } />
-        </a>
-        { ' ' }
-        <a href="#" onClick={ this.openPicker.bind(this, 'time') }>
-          { time }
           <TimePicker
-            ref={ this.saveRef.bind(this, 'time') }
+            open={ this.state.isTimeOpen }
+            onOpen={ this.setIsOpen.bind(this, 'time', true) }
+            onClose={ this.setIsOpen.bind(this, 'time', false) }
             name={ `time-picker-${this.props.name}` }
+            ampm={ false }
             value={ this.state.time }
             onChange={ this.onChange.bind(this, 'time') }
             format="24hr"
             style={ hiddenStyle } />
-        </a>
+        </ThemeProvider>
       </span>
     )
   }

@@ -17,9 +17,9 @@ for filename in $(dirname $0)/*.${ZOOM_OUT_MODEL}.log; do
     echo "#### " "$filename"
     while IFS='' read -r line || [[ -n "$line" ]]; do
         EVENT=$(echo -n "$line" | base64 -di)
-        curl -sS -XPOST "$ZOOM_OUT_HOST/api/models/$ZOOM_OUT_MODEL/push?archive=0" -H "Authorization: $ZOOM_OUT_APIKEY" -H 'Content-type: application/json' "-d$EVENT"
+        curl -sS -XPOST "$ZOOM_OUT_HOST/api/models/$ZOOM_OUT_MODEL/push/migrate?archive=0" -H "Authorization: $ZOOM_OUT_APIKEY" -H 'Content-type: application/json' "-d$EVENT"
         echo
-        sleep 0.2
+        #sleep 0.2
     done < "$filename"
 done
 
@@ -27,8 +27,8 @@ for filename in $(dirname $0)/*.${ZOOM_OUT_MODEL}.log.gz; do
     echo "#### " "$filename"
     zcat "$filename" | while IFS='' read -r line || [[ -n "$line" ]]; do
         EVENT=$(echo -n "$line" | base64 -di)
-        curl -sS -XPOST "$ZOOM_OUT_HOST/api/models/$ZOOM_OUT_MODEL/push?archive=0" -H "Authorization: $ZOOM_OUT_APIKEY" -H 'Content-type: application/json' "-d$EVENT"
+        curl -sS -XPOST "$ZOOM_OUT_HOST/api/models/$ZOOM_OUT_MODEL/push/migrate?archive=0" -H "Authorization: $ZOOM_OUT_APIKEY" -H 'Content-type: application/json' "-d$EVENT"
         echo
-        sleep 0.2
+        #sleep 0.2
     done
 done

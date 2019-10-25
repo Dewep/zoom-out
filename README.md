@@ -4,7 +4,7 @@ Event processing project
 
 ## Requirements / installation / builds
 
-Node (>= 6.x) + npm (`npm install`).
+Node (>= 12.x) + npm (`npm install`).
 
 Build web: `npm run build` (`npm run watch` for JSX watch mode).
 

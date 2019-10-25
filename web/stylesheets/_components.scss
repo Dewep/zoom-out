@@ -19,4 +19,11 @@
   & > button + button {
     margin-left: -1px;
   }
+
+  > button {
+    &.active, &:hover {
+      color: $color-button-active;
+      background: $color-button-active-gb;
+    }
+  }
 }
