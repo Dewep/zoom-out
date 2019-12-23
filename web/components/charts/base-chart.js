@@ -23,14 +23,14 @@ class BaseChart extends React.Component {
   }
 
   // .field, .period, .tick
-  buildDateRanges (config) {
+  buildDateRanges (config, props = null) {
     let unit = 'day'
     _.some(config.tick, (value, key) => {
       unit = key
       return true
     })
 
-    const filter = this.props.filters[config.field] || [null, null]
+    const filter = (props || this.props).filters[config.field] || [null, null]
     let iterPeriod = filter[0] ? moment(filter[0]) : moment().startOf(unit).subtract(config.period)
     let end = filter[1] ? moment(filter[1]) : moment()
     let ranges = []
@@ -43,7 +43,6 @@ class BaseChart extends React.Component {
       ranges.push(range)
     }
 
-    console.log({ ranges })
     return ranges
   }
 }

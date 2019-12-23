@@ -20,7 +20,7 @@ class AreaChart extends BaseChart {
             ranges: {
               date_range: {
                 field: props.config.x.field,
-                ranges: this.buildDateRanges(props.config.x)
+                ranges: this.buildDateRanges(props.config.x, props)
               },
               aggregations: {
                 value: {
