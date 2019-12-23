@@ -15,6 +15,7 @@ export function getCategories(type) {
 }
 
 const _formatNumber = function (value, decimal) {
+  value = value || 0
   const regex = '(\\d)(?=(\\d{3})+' + (decimal > 0 ? '\\.' : '$') + ')'
   return value.toFixed(decimal || 0).replace(new RegExp(regex, 'g'), '$1 ')
 }

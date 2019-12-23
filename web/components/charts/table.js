@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
-import { formatNumber } from './utils'
 import BaseChart from './base-chart'
+import { formatNumber } from './utils'
 
 class TableChart extends BaseChart {
   constructor(props) {
@@ -43,27 +43,6 @@ class TableChart extends BaseChart {
 
   shouldComponentUpdate(nextProps) {
     return this.isJsonPropsDiffer(nextProps)
-  }
-
-  formatNumber (value, decimal) {
-    const regex = '(\\d)(?=(\\d{3})+' + (decimal > 0 ? '\\.' : '$') + ')'
-    return value.toFixed(decimal || 0).replace(new RegExp(regex, 'g'), '$1 ')
-  }
-
-  formatSize (value, decimal) {
-    let unit = 'Go'
-    let modifier = 1000000000
-    if (value < 1000) {
-      unit = 'o'
-      modifier = 1
-    } else if (value < 1000000) {
-      unit = 'ko'
-      modifier = 1000
-    } else if (value < 1000000000) {
-      unit = 'Mo'
-      modifier = 1000000
-    }
-    return this.formatNumber(value / modifier, decimal === 0 ? 0 : decimal || 2) + ' ' + unit
   }
 
   generateRows(array, keys, object) {
