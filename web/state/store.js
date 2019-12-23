@@ -22,11 +22,14 @@ export default () => {
     charts: chartsReducers
   })
 
+  const middlewares = [thunkMiddleware]
+  if (window.localStorage.debug) {
+    middlewares.push(logger)
+  }
   const store = createStore(reducers, {
     filters: getInitialFilters()
   }, applyMiddleware(
-    thunkMiddleware,
-    logger
+    ...middlewares
   ))
 
   store.dispatch(updateModel(getInitialModel()))
