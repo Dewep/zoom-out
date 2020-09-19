@@ -14,7 +14,6 @@
   border-bottom: .05rem solid $gray-color-light;
   box-shadow: 0 .2rem .2rem -.2rem $dark-color;
   padding: .5rem 1rem;
-  line-height: 2.5rem;
 }
 
 #reports-topbar-title h1 {
@@ -24,5 +23,7 @@
 }
 
 #reports-topbar-global-filters {
-  text-align: right;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
 }
