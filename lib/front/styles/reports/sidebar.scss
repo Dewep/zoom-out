@@ -1,0 +1,44 @@
+#reports-sidebar {
+  min-width: 13rem;
+  padding-right: 2rem;
+
+  a {
+    display: block;
+    padding: .4rem 2rem;
+    border-radius: 0 2rem 2rem 0;
+    font-weight: 500;
+    margin-bottom: .5rem;
+  }
+
+  .sitename {
+    color: $primary-color;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  a.reports-nav-item {
+    &, &:link, &:visited {
+      text-decoration: none;
+      font-size: .8rem;
+      color: $dark-color;
+    }
+  
+    &:hover, &:focus, &:active {
+      text-decoration: none;
+      background: $gray-color-light;
+    }
+  
+    &.active {
+      background: rgba($primary-color-light, .3);
+    }
+  }
+
+  .section-title {
+    padding-left: 1rem;
+    font-size: .6rem;
+    margin-top: 2rem;
+  }
+}
