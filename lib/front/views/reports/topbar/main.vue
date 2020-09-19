@@ -1,14 +1,19 @@
 <template>
   <div>
-    <h1>Messages</h1>
+    <TopbarTitle id="reports-topbar-title" />
 
-    <a>+ Equipe</a>
-    <a class="active">Sep 13 - 14, 2020</a>
+    <TopbarGlobalFilters id="reports-topbar-global-filters" />
   </div>
 </template>
 
 <script>
+import TopbarTitle from '@/views/reports/topbar/title.vue'
+import TopbarGlobalFilters from '@/views/reports/topbar/global-filters.vue'
+
 export default {
-  name: 'ReportsTopbarMain'
+  components: {
+    TopbarTitle,
+    TopbarGlobalFilters
+  }
 }
 </script>

@@ -1,0 +1,28 @@
+#reports-topbar {
+  display: flex;
+}
+
+#reports-topbar-title {
+  flex: 0 0 auto;
+}
+
+#reports-topbar-global-filters {
+  flex: 1 1 auto;
+}
+
+#reports-topbar {
+  border-bottom: .05rem solid $gray-color-light;
+  box-shadow: 0 .2rem .2rem -.2rem $dark-color;
+  padding: .5rem 1rem;
+  line-height: 2.5rem;
+}
+
+#reports-topbar-title h1 {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 2.5rem;
+}
+
+#reports-topbar-global-filters {
+  text-align: right;
+}

@@ -7,23 +7,24 @@
     padding: .4rem 2rem;
     border-radius: 0 2rem 2rem 0;
     font-weight: 500;
-    margin-bottom: .5rem;
+    margin-bottom: .1rem;
   }
 
   .sitename {
-    color: $primary-color;
+    color: $gray-color-dark;
     text-decoration: none;
     font-size: 1.2rem;
     font-weight: bold;
-    padding-left: 1rem;
+    // padding-left: 2rem;
     margin-bottom: 1rem;
+    text-align: center;
   }
 
   a.reports-nav-item {
     &, &:link, &:visited {
       text-decoration: none;
-      font-size: .8rem;
-      color: $dark-color;
+      font-size: .7rem;
+      color: $gray-color-dark;
     }
   
     &:hover, &:focus, &:active {
@@ -32,13 +33,15 @@
     }
   
     &.active {
-      background: rgba($primary-color-light, .3);
+      background: rgba($primary-color-light, .2);
+      color: $primary-color;
     }
   }
 
   .section-title {
-    padding-left: 1rem;
+    padding: 1rem 1rem 0;
     font-size: .6rem;
-    margin-top: 2rem;
+    margin: 1rem 0 1rem;
+    border-top: .05rem solid $gray-color;
   }
 }

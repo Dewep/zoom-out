@@ -1,15 +1,9 @@
 <template>
   <div id="reports-base">
-    <div id="reports-sidebar">
-      <ReportsSidebar />
-    </div>
+    <ReportsSidebar id="reports-sidebar" />
     <div id="reports-container">
-      <div id="reports-topbar">
-        <ReportsTopbar />
-      </div>
-      <div id="reports-content">
-        <ReportsContent />
-      </div>
+      <ReportsTopbar id="reports-topbar" />
+      <ReportsContent id="reports-content" />
     </div>
   </div>
 </template>
