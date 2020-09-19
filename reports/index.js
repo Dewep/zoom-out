@@ -2,7 +2,7 @@ module.exports = [
   { slug: 'team', name: 'Mon équipe', section: null },
   { slug: 'messages', name: 'Messagerie', section: 'Général' },
   { slug: 'users', name: 'Utilisateurs', section: 'Général' },
-  { slug: 'visios', name: 'Visioconférences', section: 'Modules médicaux' },
+  { slug: 'conferences', name: 'Visioconférences', section: 'Modules médicaux' },
   { slug: 'exchanges', name: 'Echanges ville-hôpital', section: 'Modules médicaux' },
   { slug: 'requests', name: 'Requêtes API', section: 'Technique' },
   { slug: 'logs', name: 'Journaux', section: 'Technique' },

@@ -1,3 +1,4 @@
 module.exports = [
-  require('./message')
+  require('./message'),
+  require('./conference')
 ]
