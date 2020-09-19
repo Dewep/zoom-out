@@ -9,8 +9,7 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/lib/front/components/HelloWorld.vue'
+import HelloWorld from '@/components/hello-world.vue'
 
 export default {
   name: 'Home',
