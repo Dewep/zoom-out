@@ -1,10 +1,9 @@
 <template>
-  <div id="reports-content-page">
-    <RouterView
-      :report="report"
-      :filters="filters"
-    />
-  </div>
+  <a class="btn btn-primary">
+    <i class="fa-calendar-alt fas mr-2" />
+    30 derniers jours
+    <i class="fa-angle-down fas ml-2" />
+  </a>
 </template>
 
 <script>

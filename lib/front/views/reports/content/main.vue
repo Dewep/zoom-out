@@ -1,10 +1,20 @@
 <template>
   <div>
-    <ContentFilters />
+    <ContentFilters
+      v-if="report"
+      :report="report"
+      :filters="filters"
+    />
 
-    <ContentPage />
+    <ContentPage
+      :report="report"
+      :filters="filters"
+    />
 
-    <ContentFooter />
+    <ContentFooter
+      :report="report"
+      :filters="filters"
+    />
   </div>
 </template>
 
@@ -18,6 +28,17 @@ export default {
     ContentFilters,
     ContentPage,
     ContentFooter
+  },
+
+  props: {
+    report: {
+      type: Object,
+      default: null
+    },
+    filters: {
+      type: Object,
+      required: true
+    }
   }
 }
 </script>
