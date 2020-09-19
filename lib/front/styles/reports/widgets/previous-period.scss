@@ -1,0 +1,16 @@
+.reports-widget-previous-period {
+  text-align: right;
+
+  th {
+    font-size: .6rem;
+  }
+
+  td.period {
+    text-align: left;
+  }
+
+  .success-evolution {
+    font-weight: 500;
+    color: $success-color;
+  }
+}

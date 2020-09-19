@@ -1,0 +1,16 @@
+.reports-widget-card {
+  border-bottom: .05rem solid $gray-color-light;
+  padding-bottom: 1rem;
+  margin: 2rem 0 1rem;
+
+  h2 {
+    font-size: 1rem;
+  }
+
+  .reports-widget-card-waiting {
+    padding: 4rem;
+    text-align: center;
+    font-size: .6rem;
+    font-weight: 500;
+  }
+}

@@ -11,10 +11,16 @@ module.exports = {
     collection: 'conference',
 
     previousPeriod: {
-      count: { $sum: 1 },
-      nbMembersAvg: { $avg: 1 },
-      durationSum: { $sum: 1 },
-      durationAvg: { $avg: 1 }
+      project: {
+        nbMembers: 1,
+        duration: 1
+      },
+      group: {
+        count: { $sum: 1 },
+        nbMembersAvg: { $avg: '$nbMembers' },
+        durationSum: { $sum: '$duration' },
+        durationAvg: { $avg: '$duration' }
+      }
     }
   }
 }
