@@ -1,30 +1,26 @@
 <template>
   <div class="columns">
-    <ReportsWidgetCard
+    <ConferenceHistory
       :report="report"
       :filters="filters"
-      query="stats"
-      title="Comparaison des KPIs"
       class="column col-12"
-    >
-      <template v-slot:default="slotProps">
-        <ReportsWidgetPreviousPeriod
-          v-bind="slotProps"
-          :fields="statsFields"
-        />
-      </template>
-    </ReportsWidgetCard>
+    />
+    <ConferenceStats
+      :report="report"
+      :filters="filters"
+      class="column col-12"
+    />
   </div>
 </template>
 
 <script>
-import ReportsWidgetCard from '@/views/reports/widgets/card.vue'
-import ReportsWidgetPreviousPeriod from '@/views/reports/widgets/previous-period.vue'
+import ConferenceHistory from './history.vue'
+import ConferenceStats from './stats.vue'
 
 export default {
   components: {
-    ReportsWidgetCard,
-    ReportsWidgetPreviousPeriod
+    ConferenceHistory,
+    ConferenceStats
   },
 
   props: {
@@ -35,49 +31,6 @@ export default {
     filters: {
       type: Object,
       required: true
-    }
-  },
-
-  data () {
-    return {
-      statsFields: {
-        count: {
-          name: 'Nombre de visioconférences'
-        },
-        nbMembersAvg: {
-          name: 'Nombre d\'intervenants moyen',
-          format: value => {
-            if (Math.round(value) === value) {
-              return value
-            }
-            return `Entre ${Math.floor(value)} et ${Math.ceil(value)}`
-          }
-        },
-        durationSum: {
-          name: 'Durée totale',
-          format: value => {
-            const minutes = Math.round(value)
-            if (minutes > 60) {
-              const hours = Math.floor(minutes / 60)
-              const remainingMinutes = minutes - hours * 60
-              return `${hours}h${remainingMinutes < 10 ? '0' + remainingMinutes : remainingMinutes}`
-            }
-            return minutes + ' min'
-          }
-        },
-        durationAvg: {
-          name: 'Durée moyenne',
-          format: value => {
-            const minutes = Math.round(value)
-            if (minutes > 60) {
-              const hours = Math.floor(minutes / 60)
-              const remainingMinutes = minutes - hours * 60
-              return `${hours}h${remainingMinutes < 10 ? '0' + remainingMinutes : remainingMinutes}`
-            }
-            return minutes + ' min'
-          }
-        }
-      }
     }
   }
 }

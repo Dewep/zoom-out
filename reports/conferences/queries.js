@@ -1,5 +1,5 @@
 module.exports = {
-  evolution: {
+  history: {
     collection: 'conference',
 
     datedaySeries: {

@@ -68,7 +68,6 @@ export default {
       for (const fieldSlug of Object.keys(this.fields)) {
         const field = this.fields[fieldSlug]
         const format = field.format || (v => v)
-        console.log(fieldSlug, this.results)
         const current = this.results.current[fieldSlug]
         const previous = this.results.previous[fieldSlug]
         const evolution = Math.round(((current - previous) / previous) * 10000) / 100
