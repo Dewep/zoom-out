@@ -1,23 +1,17 @@
 <template>
   <div class="reports-widget-card">
-    <h2>{{ title }}</h2>
+    <CardHeader
+      :title="title"
+      :results="results"
+    />
 
     <div :class="{ loading }">
-      <div
+      <CardLoading
         v-if="!results"
-        class="reports-widget-card-waiting"
-      >
-        <span
-          v-if="error"
-          class="label label-error pointer"
-          @click.prevent="load"
-        >
-          {{ error }}
-        </span>
-        <span v-else>
-          Chargement
-        </span>
-      </div>
+        :loading="loading"
+        :error="error"
+        @reload="load()"
+      />
 
       <slot
         v-else
@@ -32,8 +26,15 @@
 
 <script>
 import { mapActions } from 'vuex'
+import CardHeader from '@/views/reports/widgets/card/header.vue'
+import CardLoading from '@/views/reports/widgets/card/loading.vue'
 
 export default {
+  components: {
+    CardHeader,
+    CardLoading
+  },
+
   props: {
     report: {
       type: Object,
@@ -74,6 +75,7 @@ export default {
     ...mapActions([
       'reportsQuery'
     ]),
+
     async load () {
       if (this.loading) {
         return

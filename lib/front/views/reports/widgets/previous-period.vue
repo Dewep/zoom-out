@@ -15,8 +15,14 @@
       <tbody>
         <tr>
           <td class="period">
-            <b>20 août - 19 sept</b><br>
-            <small>vs. précédente période</small>
+            <b v-if="from && to">{{ from }} - {{ to }}</b><br>
+            <small
+              v-if="previousPeriodFrom && previousPeriodTo"
+              :data-tooltip="`${previousPeriodFrom} - ${previousPeriodTo}`"
+              class="tooltip tooltip-bottom"
+            >
+              vs. précédente période
+            </small>
           </td>
           <td
             v-for="field in aggregatedFields"
@@ -38,6 +44,8 @@
 </template>
 
 <script>
+import { DateTime } from 'luxon'
+
 export default {
   props: {
     report: {
@@ -80,6 +88,30 @@ export default {
         }
       }
       return aggregatedFields
+    },
+    from () {
+      if (!this.results || !this.results.from) {
+        return null
+      }
+      return DateTime.fromISO(this.results.from).toLocaleString({ month: 'short', day: 'numeric' })
+    },
+    to () {
+      if (!this.results || !this.results.to) {
+        return null
+      }
+      return DateTime.fromISO(this.results.to).toLocaleString({ month: 'short', day: 'numeric' })
+    },
+    previousPeriodFrom () {
+      if (!this.results || !this.results.from || !this.results.previousPeriodFrom) {
+        return null
+      }
+      return DateTime.fromISO(this.results.previousPeriodFrom).toLocaleString({ month: 'short', day: 'numeric' })
+    },
+    previousPeriodTo () {
+      if (!this.results || !this.results.from || !this.results.previousPeriodFrom) {
+        return null
+      }
+      return DateTime.fromISO(this.results.from).minus({ days: 1 }).toLocaleString({ month: 'short', day: 'numeric' })
     }
   }
 }

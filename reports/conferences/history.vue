@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import ReportsWidgetCard from '@/views/reports/widgets/card.vue'
+import ReportsWidgetCard from '@/views/reports/widgets/card/component.vue'
 import ReportsWidgetDatedaySeries from '@/views/reports/widgets/dateday-series.vue'
 
 export default {

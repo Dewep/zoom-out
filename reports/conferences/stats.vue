@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import ReportsWidgetCard from '@/views/reports/widgets/card.vue'
+import ReportsWidgetCard from '@/views/reports/widgets/card/component.vue'
 import ReportsWidgetPreviousPeriod from '@/views/reports/widgets/previous-period.vue'
 
 export default {

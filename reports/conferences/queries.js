@@ -10,7 +10,7 @@ module.exports = {
   stats: {
     collection: 'conference',
 
-    previousPeriod: {
+    datedayPreviousPeriod: {
       project: {
         nbMembers: 1,
         duration: 1
