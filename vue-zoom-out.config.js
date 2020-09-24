@@ -30,12 +30,12 @@ module.exports = function ({
     }
   }
   if (projectRootPath) {
-    vueConfig.css.loaderOptions.sass.includePaths.unshift(path.join(projectRootPath, 'styles'))
+    vueConfig.css.loaderOptions.sass.sassOptions.includePaths.unshift(path.join(projectRootPath, 'styles'))
   }
 
   vueConfig.chainWebpack = function (config) {
-    config.entry('main').clear()
-    config.entry('main').add(path.join(zoomOutRootPath, 'main.js'))
+    config.entry('app').clear()
+    config.entry('app').add(path.join(zoomOutRootPath, 'main.js'))
 
     if (chainWebpackExtra) {
       chainWebpackExtra(config)
