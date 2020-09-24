@@ -7,11 +7,9 @@
     "url": "git+https://github.com/Dewep/zoom-out.git"
   },
   "scripts": {
-    "serve": "vue-cli-service serve --host zoom-out.dewep.ovh --public https://zoom-out.dewep.ovh --port 2004 lib/front/main.js",
-    "build": "vue-cli-service build lib/front/main.js",
+    "serve": "vue-cli-service serve --host zoom-out.dewep.ovh --public https://zoom-out.dewep.ovh --port 2004",
+    "build": "vue-cli-service build",
     "dev": "npm run serve",
-    "lint": "vue-cli-service lint",
-    "start": "node server/app.js",
     "server": "node index.js"
   },
   "author": "Maigret Aurélien",
@@ -30,9 +28,7 @@
     "spectre.css": "^0.5.9",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
-    "vuex": "^3.4.0"
-  },
-  "devDependencies": {
+    "vuex": "^3.4.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
@@ -49,5 +45,7 @@
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.2",
     "vue-template-compiler": "^2.6.11"
+  },
+  "devDependencies": {
   }
 }
