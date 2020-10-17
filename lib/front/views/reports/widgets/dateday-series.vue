@@ -51,8 +51,10 @@ export default {
   computed: {
     areaValues () {
       const values = this.results.series.map(item => {
+        const value = this.fields.compute ? this.fields.compute(item) : item[this.fields.valueSlug]
         return {
-          value: item[this.fields.valueSlug],
+          ...item,
+          value,
           label: DateTime.fromISO(item.date).toLocaleString({ month: 'short', day: 'numeric' }),
           labelLong: DateTime.fromISO(item.date).toLocaleString({ year: 'numeric', month: 'long', day: 'numeric' })
         }
