@@ -45,7 +45,7 @@ export default {
       }
 
       if (!sections._default.length) {
-        delete sections._default.length
+        delete sections._default
       }
 
       return sections
