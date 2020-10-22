@@ -12,18 +12,20 @@
     >
       <defs>
         <linearGradient
-          :id="`bg-gradient-${_uid}`"
+          v-for="(gradientColor, index) in gradientColors"
+          :id="`bg-gradient-${_uid}-${index}`"
+          :key="`bg-gradient-${_uid}-${index}`"
           x1="0"
           x2="0"
           y1="0"
           y2="1"
         >
           <stop
-            :stop-color="maxStopColor"
+            :stop-color="gradientColor.max"
             offset="0%"
           />
           <stop
-            :stop-color="minStopColor"
+            :stop-color="gradientColor.min"
             offset="100%"
           />
         </linearGradient>
@@ -79,10 +81,13 @@
           :d="`M${paddingLeftWidth},6V0H${width - paddingRightWidth}V6`"
         />
       </g>
-      <g>
+      <g
+        v-for="(areaPath, index) in areaPaths"
+        :key="`area-path-${index}`"
+      >
         <path
           :d="areaPath"
-          :fill="`url(#bg-gradient-${_uid})`"
+          :fill="`url(#bg-gradient-${_uid}-${index})`"
         />
       </g>
       <g
@@ -122,7 +127,7 @@
       class="selected-info"
     >
       <slot :selectedDot="selectedDot">
-        <b>{{ selectedDot.value }}</b><br>
+        <b>{{ selectedDot.valueSum }}</b><br>
         <b>{{ selectedDot.label }}</b>
       </slot>
     </div>
@@ -130,6 +135,10 @@
 </template>
 
 <script>
+function sum (array) {
+  return array.reduce((a, b) => a + b, 0)
+}
+
 export default {
   props: {
     values: {
@@ -152,13 +161,14 @@ export default {
       type: Number,
       default: null
     },
-    colorMin: {
+    colors: {
       type: Array,
-      default: () => [25, 103, 210]
-    },
-    colorMax: {
-      type: Array,
-      default: () => [68, 98, 208]
+      default: () => [
+        [[25, 103, 210]],
+        [[210, 76, 25]],
+        [[164, 25, 210]],
+        [[210, 25, 93]]
+      ]
     }
   },
   data () {
@@ -170,6 +180,14 @@ export default {
     }
   },
   computed: {
+    aggregatedValues () {
+      return this.values.map(item => {
+        return {
+          ...item,
+          valueSum: sum(item.value)
+        }
+      })
+    },
     mainAreaWidth () {
       return this.width - this.paddingLeftWidth - this.paddingRightWidth
     },
@@ -177,22 +195,31 @@ export default {
       return this.defaultMinX == null ? 0 : this.defaultMinX
     },
     maxX () {
-      return this.defaultMaxX == null ? this.values[this.values.length - 1] : this.defaultMaxX
+      return this.defaultMaxX == null ? this.aggregatedValues.length - 1 : this.defaultMaxX
     },
     numberX () {
       return this.values.length
     },
     maxY () {
-      return this.defaultMaxY == null ? Math.round(this.values.reduce((acc, bar) => acc > bar.value ? acc : bar.value, this.values[0].value) * 1.05) : this.defaultMaxY
+      if (this.defaultMaxY !== null) {
+        return this.defaultMaxY
+      }
+      const maxValue = this.aggregatedValues.reduce((acc, bar) => acc > bar.valueSum ? acc : bar.valueSum, this.aggregatedValues[0].valueSum)
+      return Math.round(maxValue * 1.05)
     },
     minY () {
-      return this.defaultMinY == null ? this.values.reduce((acc, bar) => acc < bar.value ? acc : bar.value, this.values[0].value) : this.defaultMinY
+      if (this.defaultMinY !== null) {
+        return this.defaultMinY
+      }
+      return this.aggregatedValues.reduce((acc, bar) => acc < bar.valueSum ? acc : bar.valueSum, this.aggregatedValues[0].valueSum)
     },
-    minStopColor () {
-      return this.interpolateColor(0)
-    },
-    maxStopColor () {
-      return this.interpolateColor(this.maxY - this.minY)
+    gradientColors () {
+      return this.colors.map(colors => {
+        return {
+          min: this.interpolateColor(colors, 0),
+          max: this.interpolateColor(colors, this.maxY - this.minY)
+        }
+      })
     },
     numberY () {
       return this.maxY - this.minY
@@ -215,11 +242,11 @@ export default {
         })).filter((y, index, array) => index % (Math.ceil(array.length / 15)) === 0)
     },
     dots () {
-      return this.values.map((dot, index) => ({
+      return this.aggregatedValues.map((dot, index) => ({
         ...dot,
         index,
         x: this.paddingLeftWidth + index * this.valueWidth + this.valueWidth / 2,
-        y: Math.round(20 + (260 / this.numberY) * (this.numberY - (dot.value - this.minY)))
+        y: Math.round(20 + (260 / this.numberY) * (this.numberY - (dot.valueSum - this.minY)))
       }))
     },
     selectedDot () {
@@ -242,17 +269,38 @@ export default {
       }
       return { right: this.width - Math.min(this.mousePosition.x, this.selectedDot.x) + 15 + 'px' }
     },
-    areaPath () {
-      let path = ''
-      path += 'M' + (this.paddingLeftWidth + this.valueWidth * 0) + ',' + (20 + (260 / this.numberY) * this.numberY)
-      path += 'L' + (this.paddingLeftWidth + this.valueWidth * 0) + ',' + this.dots[0].y
-      for (const dot of this.dots) {
-        path += 'L' + dot.x + ',' + dot.y
-      }
-      path += 'L' + (this.paddingLeftWidth + this.valueWidth * this.numberX) + ',' + this.dots[this.dots.length - 1].y
-      path += 'L' + (this.paddingLeftWidth + this.valueWidth * this.numberX) + ',' + (20 + (260 / this.numberY) * this.numberY)
-      path += 'Z'
-      return path
+    areaPaths () {
+      return this.aggregatedValues[0].value.map((_, valueIndex) => {
+        const points = this.dots.map(dot => {
+          let value = 0
+          let valueIncluded = 0
+          for (let index = 0; index <= valueIndex; index++) {
+            valueIncluded += dot.value[index]
+            if (index < valueIndex) {
+              value += dot.value[index]
+            }
+          }
+          return {
+            x: dot.x,
+            yStart: Math.round(20 + (260 / this.numberY) * (this.numberY - (valueIncluded - this.minY))),
+            yEnd: Math.round(20 + (260 / this.numberY) * (this.numberY - (value - this.minY)))
+          }
+        })
+
+        let path = ''
+        path += 'M' + (this.paddingLeftWidth + this.valueWidth * 0) + ',' + points[0].yEnd // (20 + (260 / this.numberY) * this.numberY)
+        path += 'L' + (this.paddingLeftWidth + this.valueWidth * 0) + ',' + points[0].yStart
+        for (const dot of points) {
+          path += 'L' + dot.x + ',' + dot.yStart
+        }
+        path += 'L' + (this.paddingLeftWidth + this.valueWidth * this.numberX) + ',' + points[points.length - 1].yStart
+        path += 'L' + (this.paddingLeftWidth + this.valueWidth * this.numberX) + ',' + points[points.length - 1].yEnd
+        for (const dot of points.reverse()) {
+          path += 'L' + dot.x + ',' + dot.yEnd
+        }
+        path += 'Z'
+        return path
+      })
     },
     bgAreaPath () {
       let path = ''
@@ -272,10 +320,10 @@ export default {
     window.removeEventListener('resize', this.updateWidth)
   },
   methods: {
-    interpolateColor (value) {
-      const r = Math.round(this.colorMin[0] + value * 1 / this.numberY * (this.colorMax[0] - this.colorMin[0]))
-      const g = Math.round(this.colorMin[1] + value * 1 / this.numberY * (this.colorMax[1] - this.colorMin[1]))
-      const b = Math.round(this.colorMin[2] + value * 1 / this.numberY * (this.colorMax[2] - this.colorMin[2]))
+    interpolateColor (colors, value) {
+      const r = Math.round(colors[0][0] + value * 1 / this.numberY * ((colors[1] || colors[0])[0] - colors[0][0]))
+      const g = Math.round(colors[0][1] + value * 1 / this.numberY * ((colors[1] || colors[0])[1] - colors[0][1]))
+      const b = Math.round(colors[0][2] + value * 1 / this.numberY * ((colors[1] || colors[0])[2] - colors[0][2]))
       return `rgba(${r},${g},${b},0.8)`
     },
     cursorMove (event) {
