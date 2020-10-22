@@ -51,6 +51,7 @@ export default {
       labels: {
         'current-month': 'Mois courant',
         'last-month': 'Mois dernier',
+        'last-7-days': '7 derniers jours',
         'last-30-days': '30 derniers jours',
         'last-90-days': '90 derniers jours'
         // custom: 'Personnalisé'
