@@ -4,14 +4,29 @@
       <ReportsWidgetChartArea
         :values="areaValues"
         :default-min-y="0"
+        :colors="colors"
       >
         <template v-slot:default="{ selectedDot }">
           <slot :selectedDot="selectedDot">
-            <b>{{ selectedDot.value }}</b><br>
+            <b>{{ selectedDot.valueSum }}</b><br>
             <b>{{ selectedDot.labelLong }}</b>
           </slot>
         </template>
       </ReportsWidgetChartArea>
+    </div>
+
+    <div class="reports-legends">
+      <div
+        v-for="(label, index) of fields.labels"
+        :key="index"
+        class="reports-legends-item"
+      >
+        <span
+          :style="{ background: `rgb(${colors[index].join(',')})` }"
+          class="reports-legends-item-color"
+        />
+        {{ label }}
+      </div>
     </div>
   </div>
 </template>
@@ -45,6 +60,15 @@ export default {
     results: {
       type: Object,
       required: true
+    },
+    colors: {
+      type: Array,
+      default: () => [
+        [[25, 103, 210]],
+        [[210, 76, 25]],
+        [[164, 25, 210]],
+        [[210, 25, 93]]
+      ]
     }
   },
 
