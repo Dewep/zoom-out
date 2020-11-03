@@ -135,6 +135,8 @@
 </template>
 
 <script>
+import { base as defaultColors } from '@/utils/colors'
+
 function sum (array) {
   return array.reduce((a, b) => a + b, 0)
 }
@@ -163,12 +165,7 @@ export default {
     },
     colors: {
       type: Array,
-      default: () => [
-        [[25, 103, 210]],
-        [[210, 76, 25]],
-        [[164, 25, 210]],
-        [[210, 25, 93]]
-      ]
+      default: () => defaultColors
     }
   },
   data () {

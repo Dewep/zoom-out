@@ -8,8 +8,21 @@
       >
         <template v-slot:default="{ selectedDot }">
           <slot :selectedDot="selectedDot">
-            <b>{{ selectedDot.valueSum }}</b><br>
-            <b>{{ selectedDot.labelLong }}</b>
+            <center><small>{{ selectedDot.labelLong }}</small></center>
+            <b>Total {{ selectedDot.valueSum }}</b><br>
+            <div class="reports-legends">
+              <div
+                v-for="(label, index) in fields.labels"
+                :key="index"
+                class="reports-legends-item"
+              >
+                <span
+                  :style="{ background: `rgb(${colors[index].join(',')})` }"
+                  class="reports-legends-item-color"
+                />
+                <b>{{ selectedDot.value[index] }}</b> {{ label }}
+              </div>
+            </div>
           </slot>
         </template>
       </ReportsWidgetChartArea>
@@ -25,13 +38,14 @@
           :style="{ background: `rgb(${colors[index].join(',')})` }"
           class="reports-legends-item-color"
         />
-        {{ label }}
+        <template>{{ label }}</template>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import colors from '@/utils/colors'
 import ReportsWidgetChartArea from '@/views/reports/widgets/charts/area.vue'
 import { DateTime } from 'luxon'
 
@@ -63,12 +77,7 @@ export default {
     },
     colors: {
       type: Array,
-      default: () => [
-        [[25, 103, 210]],
-        [[210, 76, 25]],
-        [[164, 25, 210]],
-        [[210, 25, 93]]
-      ]
+      default: () => colors.base
     }
   },
 
