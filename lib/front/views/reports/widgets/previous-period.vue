@@ -28,13 +28,18 @@
             v-for="field in aggregatedFields"
             :key="'value-' + field.slug"
           >
-            {{ field.current }}<br>
+            {{ field.current !== null ? field.current : 'N/A' }}<br>
             <small
-              :data-tooltip="field.previous"
-              :class="{ 'success-evolution': field.evolution > 0 }"
+              :data-tooltip="field.previous !== null ? field.previous : 'N/A'"
+              :class="{ 'success-evolution': field.evolution !== null && field.evolution > 0 }"
               class="tooltip"
             >
-              {{ `${field.evolution > 0 ? '+' : ''}${field.evolution}%` }}
+              <template v-if="field.evolution !== null">
+                {{ `${field.evolution > 0 ? '+' : ''}${field.evolution}%` }}
+              </template>
+              <template v-else>
+                N/A
+              </template>
             </small>
           </td>
         </tr>
@@ -76,14 +81,14 @@ export default {
       for (const fieldSlug of Object.keys(this.fields)) {
         const field = this.fields[fieldSlug]
         const format = field.format || (v => v)
-        const current = this.results.current[fieldSlug]
-        const previous = this.results.previous[fieldSlug]
-        const evolution = Math.round(((current - previous) / previous) * 10000) / 100
+        const current = (this.results.current && this.results.current[fieldSlug]) || 0
+        const previous = (this.results.previous && this.results.previous[fieldSlug]) || 0
+        const evolution = previous ? Math.round(((current - previous) / previous) * 10000) / 100 : null
         aggregatedFields[fieldSlug] = {
           slug: fieldSlug,
           name: field.name,
-          current: format(current),
-          previous: format(previous),
+          current: current !== null ? format(current) : null,
+          previous: previous !== null ? format(previous) : null,
           evolution
         }
       }
