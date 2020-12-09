@@ -1,7 +1,5 @@
 <template>
   <div class="about">
-    <h1>Dashboard</h1>
-
     <component
       :is="componentName"
       v-for="componentName in componentNames"
@@ -12,6 +10,7 @@
 
 <script>
 import reports from '@/reports/vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ReportDashboardPage',
@@ -21,8 +20,11 @@ export default {
   },
 
   computed: {
+    ...mapGetters([
+      'reportsAuthFilters'
+    ]),
     componentNames () {
-      return reports.dashboard.names
+      return reports.dashboard.names.filter(reportSlug => !this.reportsAuthFilters || this.reportsAuthFilters.includes(reportSlug))
     }
   }
 }

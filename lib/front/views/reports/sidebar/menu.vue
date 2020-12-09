@@ -25,9 +25,13 @@
 
 <script>
 import reports from '@/reports'
+import { mapGetters } from 'vuex'
 
 export default {
   computed: {
+    ...mapGetters([
+      'reportsAuthFilters'
+    ]),
     sections () {
       const sections = {
         _default: []
@@ -35,6 +39,10 @@ export default {
 
       for (const report of reports) {
         if (report.page === null) {
+          continue
+        }
+
+        if (this.reportsAuthFilters && !this.reportsAuthFilters.includes(report.slug)) {
           continue
         }
 

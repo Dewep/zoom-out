@@ -1,7 +1,7 @@
 <template>
   <div id="reports-app">
     <ReportsGeneralLoader
-      v-if="!filters"
+      v-if="(!report && reportQuery !== 'dashboard') || !filters"
     />
     <ReportsBase
       v-else
@@ -16,6 +16,7 @@ import reports from '@/reports'
 import encoder from '@/utils/encoder'
 import ReportsGeneralLoader from '@/views/reports/general-loader.vue'
 import ReportsBase from '@/views/reports/base.vue'
+import { mapGetters } from 'vuex'
 
 const defaultFiltersQuery = encoder.encode({ date: ['last-30-days'] })
 
@@ -37,8 +38,14 @@ export default {
   },
 
   computed: {
+    ...mapGetters([
+      'reportsAuthFilters'
+    ]),
     report () {
       const report = reports.find(report => report.slug === this.reportQuery)
+      if (report && this.reportsAuthFilters && !this.reportsAuthFilters.includes(this.reportQuery)) {
+        return null
+      }
       return report || null
     },
     filters () {
