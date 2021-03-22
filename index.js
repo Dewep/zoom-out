@@ -1,3 +1,3 @@
-const server = require('./lib/server')
+const Server = require('./lib/server')
 
-server.run().catch(console.error)
+Server.run().catch(console.error)
