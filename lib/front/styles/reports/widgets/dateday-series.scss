@@ -1,0 +1,48 @@
+.reports-widgets-charts-area {
+  position: relative;
+
+  svg {
+    max-height: 15rem;
+
+    line {
+      stroke: $dark-color;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: $dark-color;
+      shape-rendering: crispEdges;
+    }
+
+    .axis line {
+      stroke: $gray-color;
+      stroke-dasharray: 2,2;
+    }
+
+    .axis.axis-selected line {
+      stroke: $gray-color-dark;
+    }
+
+    .axis text, text.axis {
+      font-family: Arial, sans-serif;
+      font-size: 9px;
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  .selected-info {
+    position: absolute;
+    top: 30px;
+    max-width: 280px;
+    border: .1rem solid $dark-color;
+    // border-radius: .2rem;
+    padding: .3rem;
+    color: $dark-color;
+    font-size: .6rem;
+    background: $light-color;
+    opacity: .95;
+    box-shadow: 0 0 .2rem 0 $primary-color;
+  }
+}

@@ -1,0 +1,17 @@
+.reports-main-kpi {
+  padding: .5rem 0;
+  background: $gray-color-light;
+  text-align: center;
+
+  .column {
+    padding: .5rem;
+  }
+
+  .reports-main-kpi-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  .reports-main-kpi-label {
+    font-size: .6rem;
+  }
+}

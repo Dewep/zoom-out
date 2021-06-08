@@ -1,0 +1,16 @@
+.reports-legends {
+  .reports-legends-item {
+    margin-right: 1rem;
+    font-size: .6rem;
+    display: inline-block;
+  }
+
+  .reports-legends-item-color {
+    width: .5rem;
+    height: .5rem;
+    border-radius: .1rem;
+    background-color: $dark-color;
+    display: inline-block;
+    margin-right: .2rem;
+  }
+}

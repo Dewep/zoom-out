@@ -1,0 +1,15 @@
+#reports-base, #reports-container {
+  display: flex;
+}
+
+#reports-container {
+  flex-direction: column;
+}
+
+#reports-sidebar, #reports-topbar {
+  flex: 0 0 auto;
+}
+
+#reports-container, #reports-content {
+  flex: 1 1 auto;
+}
