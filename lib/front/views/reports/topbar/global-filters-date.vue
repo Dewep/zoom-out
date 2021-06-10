@@ -27,11 +27,46 @@
           </a>
         </li>
       </ul>
+
+      <div class="modal" id="modal-id" :class="{ active: isCustomModalOpen }">
+        <a class="modal-overlay" aria-label="Close" @click="closeCustomModal" />
+        <div class="modal-container">
+          <div class="modal-header">
+            <a class="btn btn-clear float-right" aria-label="Close" @click="closeCustomModal"></a>
+            <div class="modal-title h5">
+              Selectionnez une date
+            </div>
+          </div>
+          <div class="modal-body">
+            <div class="content">
+              <div class="input-group">
+                <span class="input-group-addon addon-lg">
+                  Après le
+                </span>
+                <input v-model="date.from" type="datetime-local" class="form-input input-lg">
+              </div>
+              <div class="input-group mt-2">
+                <span class="input-group-addon addon-lg">
+                  Avant le
+                </span>
+                <input v-model="date.to" type="datetime-local" class="form-input input-lg">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" @click="confirmCustomModal">
+              Confirmer
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
+
 import encoder from '@/utils/encoder'
 
 export default {
@@ -53,10 +88,12 @@ export default {
         'last-month': 'Mois dernier',
         'last-7-days': '7 derniers jours',
         'last-30-days': '30 derniers jours',
-        'last-90-days': '90 derniers jours'
-        // custom: 'Personnalisé'
+        'last-90-days': '90 derniers jours',
+        'custom': 'Personnalisé'
       },
-      loseFocus: false
+      loseFocus: false,
+      isCustomModalOpen: false,
+      date: {}
     }
   },
 
@@ -66,7 +103,7 @@ export default {
     },
     labelTitle () {
       if (this.dateType === 'custom') {
-        return '...'
+        return `du ${moment(this.filters.date[1]).format('lll')} au ${moment(this.filters.date[2]).format('lll')}`
       }
       return this.labels[this.dateType] || null
     }
@@ -75,7 +112,7 @@ export default {
   methods: {
     selectNewDate (dateType) {
       if (dateType === 'custom') {
-        // ...
+        this.isCustomModalOpen = true
         return
       }
       this.$router.push({
@@ -87,6 +124,25 @@ export default {
       this.loseFocus = true
       setTimeout(() => {
         this.loseFocus = false
+      })
+    },
+    closeCustomModal () {
+      this.date = {}
+      this.isCustomModalOpen = false
+    },
+    confirmCustomModal () {
+      if (!this.date.from || !this.date.to) {
+        this.closeCustomModal()
+        return
+      }
+
+      this.isCustomModalOpen = false
+      const date = ['custom', this.date.from, this.date.to]
+      this.$router.push({
+        name: this.$router.currentRoute.name,
+        params: {
+          filtersQuery: encoder.encode({ ...this.filters, date })
+        }
       })
     }
   }
