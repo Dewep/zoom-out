@@ -104,6 +104,10 @@ export default {
     labelTitle () {
       if (this.dateType === 'custom') {
         return `du ${moment(this.filters.date[1]).format('lll')} au ${moment(this.filters.date[2]).format('lll')}`
+      } else if (this.dateType === 'last-24h') {
+        return 'Dernières 24h'
+      } else if (this.dateType === 'last-hour') {
+        return 'Dernière heure'
       }
       return this.labels[this.dateType] || null
     }

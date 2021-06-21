@@ -6,7 +6,7 @@
 
 <script>
 import { base } from '@/utils/colors'
-import ChartPie from '../charts/pie';
+import ChartPie from '../base/pie';
 
 export default {
   components: {
