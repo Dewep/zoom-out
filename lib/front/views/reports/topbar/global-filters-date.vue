@@ -65,8 +65,7 @@
 </template>
 
 <script>
-import moment from 'moment'
-
+import { DateTime } from 'luxon'
 import encoder from '@/utils/encoder'
 
 export default {
@@ -103,7 +102,7 @@ export default {
     },
     labelTitle () {
       if (this.dateType === 'custom') {
-        return `du ${moment(this.filters.date[1]).format('lll')} au ${moment(this.filters.date[2]).format('lll')}`
+        return `du ${DateTime.fromISO(this.filters.date[1]).toLocaleString(DateTime.DATETIME_SHORT)} au ${DateTime.fromISO(this.filters.date[2]).toLocaleString(DateTime.DATETIME_SHORT)}`
       } else if (this.dateType === 'last-24h') {
         return 'Dernières 24h'
       } else if (this.dateType === 'last-hour') {

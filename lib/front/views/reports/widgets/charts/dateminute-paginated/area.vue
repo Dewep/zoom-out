@@ -46,7 +46,7 @@
 
 <script>
 import { base } from '@/utils/colors'
-import ReportsWidgetChartArea from '@/views/reports/widgets/charts/area.vue'
+import ReportsWidgetChartArea from '@/views/reports/widgets/charts/base/area.vue'
 import { DateTime } from 'luxon'
 
 export default {
