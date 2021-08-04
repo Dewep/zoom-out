@@ -1,9 +1,14 @@
 #reports-base, #reports-container {
   display: flex;
+  overflow: hidden;
 }
 
 #reports-container {
   flex-direction: column;
+}
+
+#reports-sidebar, #reports-content {
+  overflow: auto;
 }
 
 #reports-sidebar, #reports-topbar {

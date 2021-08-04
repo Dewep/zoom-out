@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="reports-widget-dateday-series">
+    <div class="reports-widget-dateminute-series">
       <ReportsWidgetChartArea
         :values="areaValues"
         :default-min-y="0"
@@ -85,11 +85,13 @@ export default {
     areaValues () {
       const values = this.results.series.map(item => {
         const value = this.fields.compute ? this.fields.compute(item) : item[this.fields.valueSlug]
+        const date = DateTime.fromFormat(item.dateminute.toString(), 'yyyyMMddhhmm')
+
         return {
           ...item,
           value,
-          label: DateTime.fromISO(item.date).toLocaleString({ month: 'short', day: 'numeric' }),
-          labelLong: DateTime.fromISO(item.date).toLocaleString({ year: 'numeric', month: 'long', day: 'numeric' })
+          label: date.toLocaleString({ month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }),
+          labelLong: date.toLocaleString({ year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' })
         }
       })
       return values

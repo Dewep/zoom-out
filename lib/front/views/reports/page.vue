@@ -12,11 +12,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import reports from '@/reports'
 import encoder from '@/utils/encoder'
 import ReportsGeneralLoader from '@/views/reports/general-loader.vue'
 import ReportsBase from '@/views/reports/base.vue'
-import { mapGetters } from 'vuex'
 
 const defaultFiltersQuery = encoder.encode({ date: ['last-30-days'] })
 
@@ -78,12 +79,12 @@ export default {
       immediate: true
     },
     filters: {
+      immediate: true,
       handler () {
         if (!this.filters) {
           this.$router.replace({ name: this.$router.currentRoute.name })
         }
-      },
-      immediate: true
+      }
     }
   }
 }
