@@ -63,7 +63,7 @@ export default {
     },
     parts () {
       return this.values.map(({ value, label, color }, index) => ({
-        percent: value / this.total * 101,
+        percent: this.total ? value / this.total * 101 : 0,
         color: color || this.colors[index],
         value,
         label
