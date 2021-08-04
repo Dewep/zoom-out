@@ -5,7 +5,7 @@
       :results="results"
     />
 
-    <div :class="{ loading }">
+    <div :class="{ loading }" ref="card-body">
       <CardLoading
         v-if="!results"
         :loading="loading"
@@ -127,6 +127,8 @@ export default {
         }
 
         this.results = await this.reportsQuery(data)
+
+        this.$refs['card-body'] && this.$refs['card-body'].scrollIntoView()
       } catch (err) {
         this.error = err.message
       }
