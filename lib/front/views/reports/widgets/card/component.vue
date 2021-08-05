@@ -51,15 +51,10 @@
 
 <script>
 import { mapActions } from 'vuex'
-
-import UseQuery from '@/views/reports/mixins/use-query.vue'
-
 import CardHeader from '@/views/reports/widgets/card/header.vue'
 import CardLoading from '@/views/reports/widgets/card/loading.vue'
 
 export default {
-  mixins: [UseQuery],
-
   components: {
     CardHeader,
     CardLoading
@@ -67,6 +62,10 @@ export default {
 
   props: {
     report: {
+      type: Object,
+      required: true
+    },
+    filters: {
       type: Object,
       required: true
     },
@@ -88,17 +87,15 @@ export default {
     return {
       loading: false,
       error: null,
-      results: null
+      results: null,
+
+      page: 1
     }
   },
 
   computed: {
     nbPages () {
       return this.results ? this.results.nbPages : 1
-    },
-    page: {
-      get () { return this.options && this.options.page || 1 },
-      set (page) { this.setOption('page', page) }
     }
   },
 
@@ -132,9 +129,7 @@ export default {
 
         this.results = await this.reportsQuery(data)
 
-        if (this.paginated) {
-          this.$refs['card-body'] && this.$refs['card-body'].scrollIntoView()
-        }
+        this.$refs['card-body'] && this.$refs['card-body'].scrollIntoView()
       } catch (err) {
         this.error = err.message
       }

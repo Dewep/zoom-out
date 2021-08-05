@@ -123,7 +123,7 @@ export default {
       this.$router.push({
         name: this.$router.currentRoute.name,
         params: {
-          query: encoder.encode({ ...this.filters, date: [dateType] })
+          filtersQuery: encoder.encode({ ...this.filters, date: [dateType] })
         }
       })
       this.loseFocus = true
@@ -146,7 +146,7 @@ export default {
       this.$router.push({
         name: this.$router.currentRoute.name,
         params: {
-          query: encoder.encode({ ...this.filters, date })
+          filtersQuery: encoder.encode({ ...this.filters, date })
         }
       })
     }

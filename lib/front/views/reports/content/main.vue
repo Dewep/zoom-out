@@ -9,7 +9,6 @@
     <ContentPage
       :report="report"
       :filters="filters"
-      :options="options"
     />
 
     <ContentFooter
@@ -37,10 +36,6 @@ export default {
       default: null
     },
     filters: {
-      type: Object,
-      required: true
-    },
-    options: {
       type: Object,
       required: true
     }

@@ -3,7 +3,6 @@
     <RouterView
       :report="report"
       :filters="filters"
-      :options="options"
     />
   </div>
 </template>
@@ -16,10 +15,6 @@ export default {
       default: null
     },
     filters: {
-      type: Object,
-      required: true
-    },
-    options: {
       type: Object,
       required: true
     }
