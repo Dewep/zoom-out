@@ -7,6 +7,7 @@
       v-else
       :report="report"
       :filters="filters"
+      :options="options"
     />
   </div>
 </template>
@@ -19,8 +20,6 @@ import encoder from '@/utils/encoder'
 import ReportsGeneralLoader from '@/views/reports/general-loader.vue'
 import ReportsBase from '@/views/reports/base.vue'
 
-const defaultFiltersQuery = encoder.encode({ date: ['last-30-days'] })
-
 export default {
   components: {
     ReportsGeneralLoader,
@@ -32,7 +31,7 @@ export default {
       type: String,
       default: null
     },
-    filtersQuery: {
+    query: {
       type: String,
       default: null
     }
@@ -49,23 +48,23 @@ export default {
       }
       return report || null
     },
-    filters () {
-      let filters = {}
+    decodedQuery () {
       try {
-        if (this.filtersQuery) {
-          filters = encoder.decode(this.filtersQuery)
-        }
-      } catch (err) {
-        console.warn(err)
-        return null
+        const { filters = {}, options = {} } = encoder.decode(this.query)
+        return { filters, options }
+      } catch {
+        return { filters: {}, options: {} }
       }
+    },
+    filters () {
+      let filters = this.decodedQuery.filters
       if (!filters.date) {
         filters.date = ['last-30-days']
       }
-      if (this.filtersQuery && encoder.encode(filters) === defaultFiltersQuery) {
-        return null
-      }
       return filters
+    },
+    options () {
+      return this.decodedQuery.options
     }
   },
 
@@ -73,7 +72,7 @@ export default {
     report: {
       handler () {
         if (!this.report && this.reportQuery !== 'dashboard') {
-          this.$router.replace({ name: 'report-dashboard', params: { filtersQuery: this.filtersQuery } })
+          this.$router.replace({ name: 'report-dashboard', params: { query: this.query } })
         }
       },
       immediate: true
