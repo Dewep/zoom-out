@@ -201,6 +201,7 @@ export default {
       if (this.defaultMinY !== null) {
         return this.defaultMinY
       }
+
       return this.aggregatedValues.reduce((acc, bar) => acc < bar.valueSum ? acc : bar.valueSum, this.aggregatedValues[0].valueSum)
     },
     maxY () {
@@ -211,7 +212,7 @@ export default {
       if (maxValue === this.minY) {
         maxValue += 1
       }
-      return Math.round(maxValue * 1.05)
+      return Math.ceil(maxValue * 1.05)
     },
     gradientColors () {
       return this.colors.map(colors => {

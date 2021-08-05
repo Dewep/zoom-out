@@ -14,7 +14,7 @@
       </a>
       <ul class="menu text-left">
         <li
-          v-for="(label, labelSlug) in labels"
+          v-for="(label, labelSlug) in availableDateFilters"
           :key="labelSlug"
           class="menu-item"
         >
@@ -83,6 +83,8 @@ export default {
   data () {
     return {
       labels: {
+        'last-hour': 'Dernière heure',
+        'last-24h': 'Dernières 24h',
         'current-month': 'Mois courant',
         'last-month': 'Mois dernier',
         'last-7-days': '7 derniers jours',
@@ -97,16 +99,15 @@ export default {
   },
 
   computed: {
+    availableDateFilters () {
+      return this.labels
+    },
     dateType () {
       return (this.filters.date && this.filters.date[0]) || 'last-30-days'
     },
     labelTitle () {
       if (this.dateType === 'custom') {
         return `du ${DateTime.fromISO(this.filters.date[1]).toLocaleString(DateTime.DATETIME_SHORT)} au ${DateTime.fromISO(this.filters.date[2]).toLocaleString(DateTime.DATETIME_SHORT)}`
-      } else if (this.dateType === 'last-24h') {
-        return 'Dernières 24h'
-      } else if (this.dateType === 'last-hour') {
-        return 'Dernière heure'
       }
       return this.labels[this.dateType] || null
     }
@@ -118,6 +119,7 @@ export default {
         this.isCustomModalOpen = true
         return
       }
+
       this.$router.push({
         name: this.$router.currentRoute.name,
         params: {
