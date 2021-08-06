@@ -41,7 +41,7 @@
             <div class="content">
               <div class="input-group">
                 <span class="input-group-addon addon-lg">
-                  Après le
+                  Après le *
                 </span>
                 <input v-model="date.from" type="datetime-local" class="form-input input-lg">
               </div>
@@ -107,7 +107,8 @@ export default {
     },
     labelTitle () {
       if (this.dateType === 'custom') {
-        return `du ${DateTime.fromISO(this.filters.date[1]).toLocaleString(DateTime.DATETIME_SHORT)} au ${DateTime.fromISO(this.filters.date[2]).toLocaleString(DateTime.DATETIME_SHORT)}`
+        return `du ${DateTime.fromISO(this.filters.date[1]).toLocaleString(DateTime.DATETIME_SHORT)}` +
+          (this.filters.date[2] ? ` au ${DateTime.fromISO(this.filters.date[2]).toLocaleString(DateTime.DATETIME_SHORT)}` : ' à aujourd\'hui')
       }
       return this.labels[this.dateType] || null
     }
@@ -136,7 +137,7 @@ export default {
       this.isCustomModalOpen = false
     },
     confirmCustomModal () {
-      if (!this.date.from || !this.date.to) {
+      if (!this.date.from) {
         this.closeCustomModal()
         return
       }

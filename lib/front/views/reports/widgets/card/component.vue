@@ -52,6 +52,9 @@
 <script>
 import { mapActions } from 'vuex'
 
+import isEqual from 'lodash/isEqual'
+import omit from 'lodash/omit'
+
 import UseQuery from '@/views/reports/mixins/use-query.vue'
 
 import CardHeader from '@/views/reports/widgets/card/header.vue'
@@ -97,17 +100,26 @@ export default {
       return this.results ? this.results.nbPages : 1
     },
     page: {
-      get () { return this.options && this.options.page || 1 },
-      set (page) { this.setOption('page', page) }
+      get () { return this.filters.page || 1 },
+      set (page) { this.setFilter('page', page) }
+    },
+    isItemSelected () {
+      return typeof this.options.selectedItemIndex === 'number'
     }
   },
 
   watch: {
-    page: 'load',
     filters: {
       immediate: true,
-      handler () {
-        this.load()
+      deep: true,
+      handler (filters, oldFilters) {
+        if (this.paginated && !isEqual(omit(filters, ['page']), omit(oldFilters, ['page']))) {
+          this.setFilter('page', 1)
+        }
+
+        if (!isEqual(filters, oldFilters)) {
+          this.load()
+        }
       }
     }
   },
@@ -124,15 +136,16 @@ export default {
       this.loading = true
       this.error = null
       try {
-        const { filters, page, query, report } = this
-        const data = { filters, query, report: report.slug }
-        if (this.paginated) {
-          data.page = page
+        const { filters, query, report } = this
+
+        if (!this.paginated) {
+          delete filters.page
         }
 
+        const data = { filters, query, report: report.slug }
         this.results = await this.reportsQuery(data)
 
-        if (this.paginated) {
+        if (this.paginated && !this.isItemSelected) {
           this.$refs['card-body'] && this.$refs['card-body'].scrollIntoView()
         }
       } catch (err) {
