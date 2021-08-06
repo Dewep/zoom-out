@@ -4,18 +4,21 @@
       id="reports-sidebar"
       :report="report"
       :filters="filters"
+      :options="options"
     />
     <div id="reports-container">
       <ReportsTopbar
         id="reports-topbar"
         :report="report"
         :filters="filters"
+        :options="options"
       />
 
       <ReportsContent
         id="reports-content"
         :report="report"
         :filters="filters"
+        :options="options"
       />
     </div>
   </div>
@@ -39,6 +42,10 @@ export default {
       default: null
     },
     filters: {
+      type: Object,
+      required: true
+    },
+    options: {
       type: Object,
       required: true
     }
