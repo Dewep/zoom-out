@@ -9,6 +9,7 @@
       :viewBox="`0 0 ${width} 300`"
       version="1.1"
       preserveAspectRatio="xMinYMin meet"
+      @click="onClick"
     >
       <defs>
         <linearGradient
@@ -166,6 +167,10 @@ export default {
     colors: {
       type: Array,
       default: () => defaultColors
+    },
+    onDotClick: {
+      type: Function,
+      default: null
     }
   },
   data () {
@@ -342,6 +347,11 @@ export default {
     },
     range (length) {
       return Array.from({ length }).map((_, i) => i)
+    },
+    onClick () {
+      if (this.selectedDot && this.onDotClick) {
+        this.onDotClick(this.selectedDot)
+      }
     }
   }
 }

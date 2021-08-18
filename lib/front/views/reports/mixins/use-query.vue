@@ -16,6 +16,9 @@ export default {
   },
 
   methods: {
+    setCustomDateFilter (from, to) {
+      this.setFilter('date', ['custom', from, to])
+    },
     setOption (key, value) {
       this.setOptions({ ...this.options, [key]: value })
     },
@@ -36,6 +39,11 @@ export default {
           params: { query }
         })
       }
+    },
+    navigateToWithCustom (name, from, to) {
+      const date = ['custom', from, to]
+      const query = encoder.encode({ filters: { date }, options: {} })
+      this.$router.push({ name, params: { query } })
     }
   }
 }

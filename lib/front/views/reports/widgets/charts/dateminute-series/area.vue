@@ -5,6 +5,7 @@
         :values="areaValues"
         :default-min-y="0"
         :colors="colors"
+        :on-dot-click="onDotClick"
       >
         <template v-slot:default="{ selectedDot }">
           <slot :selectedDot="selectedDot">
@@ -78,6 +79,10 @@ export default {
     colors: {
       type: Array,
       default: () => base
+    },
+    onDotClick: {
+      type: Function,
+      default: null
     }
   },
 
