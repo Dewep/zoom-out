@@ -21,7 +21,7 @@
                   :style="{ background: `rgb(${colors[index].join(',')})` }"
                   class="reports-legends-item-color"
                 />
-                <b>{{ selectedDot.value[index] }}</b> {{ label }}
+                <b>{{ selectedDot.value[index] }}</b> {{ typeof label === 'function' ? label(selectedDot) : label }}
               </div>
             </div>
           </slot>
@@ -39,7 +39,7 @@
           :style="{ background: `rgb(${colors[index].join(',')})` }"
           class="reports-legends-item-color"
         />
-        <template>{{ label }}</template>
+        <template>{{ typeof label === 'function' ? label() : label }}</template>
       </div>
     </div>
   </div>
