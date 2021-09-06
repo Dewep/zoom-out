@@ -26,7 +26,7 @@
 
 <script>
 import { range, random } from '@/utils'
-import { base } from '@/utils/colors'
+import { base as defaultColors } from '@/utils/colors'
 
 export default {
   name: 'chart-pie',
@@ -53,10 +53,10 @@ export default {
       return this.values.reduce((acc, part) => acc + part.value, 0)
     },
     colors () {
-      const colors = base.slice(0, this.values.length)
+      const colors = defaultColors.slice(0, this.values.length)
         .map(e => e[0])
         .map(([r, g, b]) => `rgba(${r}, ${g}, ${b})`)
-      if (this.values.length > base.length) {
+      if (this.values.length > defaultColors.length) {
         colors.push(...range(this.values.length - base.length).map(_ => random()))
       }
       return colors

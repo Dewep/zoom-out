@@ -35,6 +35,8 @@
         :transform="`translate(${paddingLeftWidth}, 0)`"
         class="axis"
       >
+        <line v-if="limit" class="limit" :x2="mainAreaWidth" :y1="limitY" :y2="limitY" />
+
         <g
           v-for="y in yAxis"
           :key="y.pos"
@@ -168,6 +170,10 @@ export default {
       type: Array,
       default: () => defaultColors
     },
+    limit: {
+      type: Number,
+      default: null
+    },
     onDotClick: {
       type: Function,
       default: null
@@ -182,6 +188,10 @@ export default {
     }
   },
   computed: {
+    limitY () {
+      console.log(Math.round(20 + (260 / this.numberY) * (this.numberY - (this.limit - this.minY))))
+      return Math.round(20 + (260 / this.numberY) * (this.numberY - (this.limit - this.minY)))
+    },
     aggregatedValues () {
       return this.values.map(item => {
         return {

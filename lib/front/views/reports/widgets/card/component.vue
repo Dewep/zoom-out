@@ -53,7 +53,6 @@
 import { mapActions } from 'vuex'
 
 import isEqual from 'lodash/isEqual'
-import omit from 'lodash/omit'
 
 import UseQuery from '@/views/reports/mixins/use-query.vue'
 
@@ -100,8 +99,8 @@ export default {
       return this.results ? this.results.nbPages : 1
     },
     page: {
-      get () { return this.filters.page || 1 },
-      set (page) { this.setFilter('page', page) }
+      get () { return this.options.page || 1 },
+      set (page) { this.setOptions({ page, selectedItemIndex: null }) }
     },
     isItemSelected () {
       return typeof this.options.selectedItemIndex === 'number'
@@ -109,17 +108,23 @@ export default {
   },
 
   watch: {
-    filters: {
+    'filters': {
       immediate: true,
       deep: true,
       handler (filters, oldFilters) {
-        if (this.paginated && !isEqual(omit(filters, ['page']), omit(oldFilters, ['page']))) {
-          this.setFilter('page', 1)
-        }
-
         if (!isEqual(filters, oldFilters)) {
+          if (oldFilters && this.paginated && this.options.page !== 1) {
+            this.setOptions({ page: 1, selectedItemIndex: null })
+            return
+          }
+
           this.load()
         }
+      }
+    },
+    'options.page': {
+      handler () {
+        this.load()
       }
     }
   },
@@ -136,14 +141,20 @@ export default {
       this.loading = true
       this.error = null
       try {
-        const { filters, query, report } = this
-
-        if (!this.paginated) {
-          delete filters.page
-        }
+        const { filters, options, query, report } = this
 
         const data = { filters, query, report: report.slug }
-        this.results = await this.reportsQuery(data)
+        if (this.paginated) {
+          data.page = options.page
+        }
+
+        const nonce = Math.random().toString()
+        this.nonce = nonce
+
+        const results = await this.reportsQuery(data)
+        if (this.nonce === nonce) {
+          this.results = results
+        }
 
         if (this.paginated && !this.isItemSelected) {
           this.$refs['card-body'] && this.$refs['card-body'].scrollIntoView()

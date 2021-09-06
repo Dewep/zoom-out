@@ -22,8 +22,11 @@ export default {
     setOption (key, value) {
       this.setOptions({ ...this.options, [key]: value })
     },
+    deleteOption (key) {
+      this.setOptions({ ...this.options, [key]: undefined })
+    },
     setOptions (options) {
-      this.setQuery({ options, filters: this.filters })
+      this.setQuery({ options: { ...this.options, ...options }, filters: this.filters })
     },
     setFilter (key, value) {
       this.setFilters({ ...this.filters, [key]: value })

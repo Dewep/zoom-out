@@ -13,6 +13,11 @@
       fill: none;
       stroke: $dark-color;
       shape-rendering: crispEdges;
+
+      &.limit {
+        stroke: $error-color;
+        stroke-dasharray: 5,1;
+      }
     }
 
     .axis line {
