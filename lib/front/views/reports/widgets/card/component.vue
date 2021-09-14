@@ -113,7 +113,7 @@ export default {
       deep: true,
       handler (filters, oldFilters) {
         if (!isEqual(filters, oldFilters)) {
-          if (oldFilters && this.paginated && this.options.page !== 1) {
+          if (oldFilters && this.paginated && this.options.page > 1) {
             this.setOptions({ page: 1, selectedItemIndex: null })
             return
           }
