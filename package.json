@@ -2,10 +2,7 @@
   "name": "zoom-out",
   "version": "3.3.0",
   "description": "Zoom-out",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Dewep/zoom-out.git"
-  },
+  "author": "Maigret Aurélien",
   "scripts": {
     "serve": "vue-cli-service serve --host zoom-out.dewep.ovh --public https://zoom-out.dewep.ovh --port 2004",
     "build": "vue-cli-service build",
@@ -13,27 +10,29 @@
     "dev": "npm run serve",
     "server": "node index.js"
   },
-  "author": "Maigret Aurélien",
-  "license": "SEE LICENSE IN LICENCE",
-  "bugs": {
-    "url": "https://github.com/Dewep/zoom-out/issues"
-  },
   "dependencies": {
     "@vue/cli-plugin-babel": "4.5.15",
-    "@vue/cli-plugin-eslint": "4.5.15",
+    "@vue/cli-plugin-eslint": "4.5.0",
     "@vue/cli-plugin-router": "4.5.15",
     "@vue/cli-plugin-vuex": "4.5.15",
     "@vue/cli-service": "4.5.15",
+    "@vue/eslint-config-standard": "5.1.2",
+    "babel-eslint": "10.1.0",
     "core-js": "3.20.0",
     "enhanced-resolve": "5.8.3",
-    "eslint": "6.8.0",
-    "express": "4.17.1",
+    "eslint": "6.7.2",
+    "eslint-plugin-import": "2.20.2",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-standard": "4.0.0",
+    "eslint-plugin-vue": "6.2.2",
+    "express": "4.17.2",
     "full-icu": "1.4.0",
     "jsonwebtoken": "8.5.1",
     "luxon": "2.2.0",
     "mongodb": "4.2.2",
-    "sass-loader": "12.4.0",
     "sass": "1.45.1",
+    "sass-loader": "12.4.0",
     "spectre.css": "0.5.9",
     "vue": "2.6.14",
     "vue-router": "3.5.3",
@@ -42,5 +41,12 @@
     "webpack": "5.65.0",
     "ws": "8.4.0"
   },
-  "devDependencies": {}
+  "bugs": {
+    "url": "https://github.com/Dewep/zoom-out/issues"
+  },
+  "license": "SEE LICENSE IN LICENCE",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dewep/zoom-out.git"
+  }
 }
