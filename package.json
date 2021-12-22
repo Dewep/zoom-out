@@ -32,13 +32,13 @@
     "luxon": "2.2.0",
     "mongodb": "4.2.2",
     "sass": "1.45.1",
-    "sass-loader": "10.1.1",
+    "sass-loader": "10.2.0",
     "spectre.css": "0.5.9",
     "vue": "2.6.14",
     "vue-router": "3.5.3",
     "vue-template-compiler": "2.6.14",
     "vuex": "3.6.2",
-    "webpack": "5.65.0",
+    "webpack": "4.36.0",
     "ws": "8.4.0"
   },
   "bugs": {
