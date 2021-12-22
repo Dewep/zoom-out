@@ -7,7 +7,7 @@
     "serve": "vue-cli-service serve --host zoom-out.dewep.ovh --public https://zoom-out.dewep.ovh --port 2004",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "dev": "npm run serve",
+    "dev": "yarn run serve",
     "server": "node index.js"
   },
   "dependencies": {
