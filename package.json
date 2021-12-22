@@ -9,6 +9,7 @@
   "scripts": {
     "serve": "vue-cli-service serve --host zoom-out.dewep.ovh --public https://zoom-out.dewep.ovh --port 2004",
     "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
     "dev": "npm run serve",
     "server": "node index.js"
   },
@@ -23,9 +24,9 @@
     "@vue/cli-plugin-router": "4.5.15",
     "@vue/cli-plugin-vuex": "4.5.15",
     "@vue/cli-service": "4.5.15",
-    "@vue/eslint-config-standard": "6.1.0",
     "core-js": "3.20.0",
     "enhanced-resolve": "5.8.3",
+    "eslint": "6.8.0",
     "express": "4.17.1",
     "full-icu": "1.4.0",
     "jsonwebtoken": "8.5.1",
