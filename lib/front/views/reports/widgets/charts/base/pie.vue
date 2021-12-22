@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import { range, random } from '@/utils'
-import { base as defaultColors } from '@/utils/colors'
+import { range } from '@/utils'
+import { base as defaultColors, random } from '@/utils/colors'
 
 export default {
   name: 'chart-pie',
