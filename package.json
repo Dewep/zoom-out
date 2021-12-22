@@ -41,6 +41,9 @@
     "webpack": "4.36.0",
     "ws": "8.4.0"
   },
+  "resolutions": {
+    "webpack": "4.36.0"
+  },
   "bugs": {
     "url": "https://github.com/Dewep/zoom-out/issues"
   },
