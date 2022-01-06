@@ -189,7 +189,6 @@ export default {
   },
   computed: {
     limitY () {
-      console.log(Math.round(20 + (260 / this.numberY) * (this.numberY - (this.limit - this.minY))))
       return Math.round(20 + (260 / this.numberY) * (this.numberY - (this.limit - this.minY)))
     },
     aggregatedValues () {
