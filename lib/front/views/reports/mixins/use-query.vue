@@ -43,6 +43,9 @@ export default {
         })
       }
     },
+    clearFilters () {
+      this.setFilters({ date: this.filters.date })
+    },
     navigateToWithCustom (name, from, to) {
       const date = ['custom', from, to]
       const query = encoder.encode({ filters: { date }, options: {} })
