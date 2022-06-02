@@ -23,7 +23,7 @@ export default {
       default: () => {}
     },
     colors: {
-      type: Array,
+      type: [Array, Object],
       default: () => base
     }
   },
@@ -39,7 +39,7 @@ export default {
         }
         return acc
       }, {}))
-      .map(([key, value]) => ({ label: this.labels[key] || key, value }))
+      .map(([key, value]) => ({ label: this.labels[key] || key, value, color: this.colors[key] || null }))
     }
   }
 }
