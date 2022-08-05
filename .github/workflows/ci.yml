@@ -1,0 +1,56 @@
+name: Continuous Integration
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '**'
+
+jobs:
+
+  audit:
+    name: Audit dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PANDALAB_DELIVERY_GITHUB_TOKEN }}
+
+      - uses: PandaLab-SAS/setup-github-actions@master
+        name: Setup GitHub Actions
+        with:
+          token: ${{ secrets.PANDALAB_DELIVERY_GITHUB_TOKEN }}
+
+      - uses: ./.github/actions/audit
+
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PANDALAB_DELIVERY_GITHUB_TOKEN }}
+
+      - uses: PandaLab-SAS/setup-github-actions@master
+        name: Setup GitHub Actions
+        with:
+          token: ${{ secrets.PANDALAB_DELIVERY_GITHUB_TOKEN }}
+
+      - uses: ./.github/actions/eslint
+        with:
+          ssh-key: ${{ secrets.PANDALAB_DELIVERY_SSH_PRIVATE_KEY }}
+
+  sast:
+    name: SAST
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PANDALAB_DELIVERY_GITHUB_TOKEN }}
+
+      - uses: PandaLab-SAS/setup-github-actions@master
+        name: Setup GitHub Actions
+        with:
+          token: ${{ secrets.PANDALAB_DELIVERY_GITHUB_TOKEN }}
+
+      - uses: ./.github/actions/njsscan

@@ -2,7 +2,7 @@
 import encoder from '@/utils/encoder'
 
 export default {
-  name: 'use-query',
+  name: 'UseQuery',
 
   props: {
     filters: {

@@ -57,10 +57,12 @@ export default {
       }
     },
     filters () {
-      let filters = this.decodedQuery.filters
+      const filters = this.decodedQuery.filters
+
       if (!filters.date) {
         filters.date = ['last-30-days']
       }
+
       return filters
     },
     options () {

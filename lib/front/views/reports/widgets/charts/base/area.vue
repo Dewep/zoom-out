@@ -35,7 +35,13 @@
         :transform="`translate(${paddingLeftWidth}, 0)`"
         class="axis"
       >
-        <line v-if="limit" class="limit" :x2="mainAreaWidth" :y1="limitY" :y2="limitY" />
+        <line
+          v-if="limit"
+          class="limit"
+          :x2="mainAreaWidth"
+          :y1="limitY"
+          :y2="limitY"
+        />
 
         <g
           v-for="y in yAxis"
