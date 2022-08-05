@@ -9,7 +9,7 @@ module.exports = function ({
   chainWebpackExtra = null,
   configureWebpackExtra = null,
   devServer = null
-}) {
+} = {}) {
   const vueConfig = {}
 
   vueConfig.productionSourceMap = false

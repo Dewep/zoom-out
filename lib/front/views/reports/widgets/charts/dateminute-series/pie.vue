@@ -5,8 +5,9 @@
 </template>
 
 <script>
+import ChartPie from '../base/pie'
+
 import { base } from '@/utils/colors'
-import ChartPie from '../base/pie';
 
 export default {
   components: {
@@ -30,7 +31,7 @@ export default {
 
   computed: {
     values () {
-      return Object.entries(this.results.series.reduce((acc, obj) => {
+      const entries = this.results.series.reduce((acc, obj) => {
         for (const [key, value] of Object.entries(obj)) {
           if (key.startsWith('date')) {
             continue
@@ -38,8 +39,11 @@ export default {
           acc[key] = (acc[key] || 0) + value
         }
         return acc
-      }, {}))
-      .map(([key, value]) => ({ label: this.labels[key] || key, value, color: this.colors[key] || null }))
+      }, {})
+
+      return Object
+        .entries(entries)
+        .map(([key, value]) => ({ label: this.labels[key] || key, value, color: this.colors[key] || null }))
     }
   }
 }

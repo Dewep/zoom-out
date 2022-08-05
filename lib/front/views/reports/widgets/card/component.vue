@@ -108,7 +108,7 @@ export default {
   },
 
   watch: {
-    'filters': {
+    filters: {
       immediate: true,
       deep: true,
       handler (filters, oldFilters) {

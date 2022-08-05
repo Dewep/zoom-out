@@ -28,7 +28,11 @@
         </li>
       </ul>
 
-      <div class="modal" id="modal-id" :class="{ active: isCustomModalOpen }">
+      <div
+        class="modal"
+        id="modal-id"
+        :class="{ active: isCustomModalOpen }"
+      >
         <a class="modal-overlay" aria-label="Close" @click="closeCustomModal" />
         <div class="modal-container">
           <div class="modal-header">
@@ -90,7 +94,7 @@ export default {
         'last-7-days': '7 derniers jours',
         'last-30-days': '30 derniers jours',
         'last-90-days': '90 derniers jours',
-        'custom': 'Personnalisé'
+        custom: 'Personnalisé'
       },
       loseFocus: false,
       isCustomModalOpen: false,

@@ -57,7 +57,7 @@ export default {
         .map(e => e[0])
         .map(([r, g, b]) => `rgba(${r}, ${g}, ${b})`)
       if (this.values.length > defaultColors.length) {
-        colors.push(...range(this.values.length - base.length).map(_ => random()))
+        colors.push(...range(this.values.length - defaultColors.length).map(_ => random()))
       }
       return colors
     },
