@@ -1,6 +1,6 @@
 <template>
   <div class="reports-widget-dateminute-series">
-    <ChartPie :values="values"/>
+    <ChartPie :values="values" />
   </div>
 </template>
 

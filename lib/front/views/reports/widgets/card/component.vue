@@ -5,7 +5,10 @@
       :results="results"
     />
 
-    <div :class="{ loading }" ref="card-body">
+    <div
+      ref="card-body"
+      :class="{ loading }"
+    >
       <CardLoading
         v-if="!results"
         :loading="loading"
@@ -21,26 +24,48 @@
           :results="results"
         />
 
-        <ul v-if="paginated" class="pagination">
-          <li class="page-item" :class="{ disabled: page === 1 }">
+        <ul
+          v-if="paginated"
+          class="pagination"
+        >
+          <li
+            class="page-item"
+            :class="{ disabled: page === 1 }"
+          >
             <a @click="page -= 1">Previous</a>
           </li>
-          <li v-if="page > 2" class="page-item" :class="{ disabled: page === 1 }">
+          <li
+            v-if="page > 2"
+            class="page-item"
+            :class="{ disabled: page === 1 }"
+          >
             <a @click="page -= 2">{{ page - 2 }}</a>
           </li>
-          <li v-if="page > 1" class="page-item">
+          <li
+            v-if="page > 1"
+            class="page-item"
+          >
             <a @click="page -= 1">{{ page - 1 }}</a>
           </li>
           <li class="page-item active">
             <a>{{ page }}</a>
           </li>
-          <li v-if="page < nbPages" class="page-item">
+          <li
+            v-if="page < nbPages"
+            class="page-item"
+          >
             <a @click="page += 1">{{ page + 1 }}</a>
           </li>
-          <li v-if="page < nbPages - 1" class="page-item">
+          <li
+            v-if="page < nbPages - 1"
+            class="page-item"
+          >
             <a @click="page += 2">{{ page + 2 }}</a>
           </li>
-          <li class="page-item" :class="{ disabled: page >= nbPages }">
+          <li
+            class="page-item"
+            :class="{ disabled: page >= nbPages }"
+          >
             <a @click="page += 1">Next</a>
           </li>
         </ul>
@@ -60,12 +85,12 @@ import CardHeader from '@/views/reports/widgets/card/header.vue'
 import CardLoading from '@/views/reports/widgets/card/loading.vue'
 
 export default {
-  mixins: [UseQuery],
 
   components: {
     CardHeader,
     CardLoading
   },
+  mixins: [UseQuery],
 
   props: {
     report: {

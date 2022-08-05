@@ -1,6 +1,9 @@
 <template>
   <div class="chart-pie">
-    <svg viewBox="0 0 64 64" class="pie">
+    <svg
+      viewBox="0 0 64 64"
+      class="pie"
+    >
       <circle
         v-for="(part, index) in parts"
         :key="index"
@@ -14,7 +17,11 @@
       />
     </svg>
     <div class="labels">
-      <div v-for="(part, index) in parts" :key="index" class="label">
+      <div
+        v-for="(part, index) in parts"
+        :key="index"
+        class="label"
+      >
         <div :style="{ background: part.color }" />
         <span>
           <i>{{ part.label }}</i>: <b>{{ part.value }}</b> ({{ (part.percent > 100 ? 100 : part.percent).toPrecision(2) }}%)
@@ -29,7 +36,7 @@ import { range } from '@/utils'
 import { base as defaultColors, random } from '@/utils/colors'
 
 export default {
-  name: 'chart-pie',
+  name: 'ChartPie',
 
   props: {
     values: {

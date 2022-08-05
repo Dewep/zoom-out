@@ -29,14 +29,22 @@
       </ul>
 
       <div
-        class="modal"
         id="modal-id"
+        class="modal"
         :class="{ active: isCustomModalOpen }"
       >
-        <a class="modal-overlay" aria-label="Close" @click="closeCustomModal" />
+        <a
+          class="modal-overlay"
+          aria-label="Close"
+          @click="closeCustomModal"
+        />
         <div class="modal-container">
           <div class="modal-header">
-            <a class="btn btn-clear float-right" aria-label="Close" @click="closeCustomModal"></a>
+            <a
+              class="btn btn-clear float-right"
+              aria-label="Close"
+              @click="closeCustomModal"
+            />
             <div class="modal-title h5">
               Selectionnez une date
             </div>
@@ -47,18 +55,29 @@
                 <span class="input-group-addon addon-lg">
                   Après le *
                 </span>
-                <input v-model="date.from" type="datetime-local" class="form-input input-lg">
+                <input
+                  v-model="date.from"
+                  type="datetime-local"
+                  class="form-input input-lg"
+                >
               </div>
               <div class="input-group mt-2">
                 <span class="input-group-addon addon-lg">
                   Avant le
                 </span>
-                <input v-model="date.to" type="datetime-local" class="form-input input-lg">
+                <input
+                  v-model="date.to"
+                  type="datetime-local"
+                  class="form-input input-lg"
+                >
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-primary" @click="confirmCustomModal">
+            <button
+              class="btn btn-primary"
+              @click="confirmCustomModal"
+            >
               Confirmer
             </button>
           </div>
